@@ -7,6 +7,14 @@ Lakhya Jyoti Nath (ljnath)
 
 Date : September 2020 - October 2024  
 
+![GitHub last commit](https://img.shields.io/github/last-commit/jshergal/StuceSoftware.RandomStringGenerator)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jshergal/StuceSoftware.RandomStringGenerator/dotnet-CI-workflow.yaml)
+[![codecov](https://codecov.io/gh/jshergal/StuceSoftware.RandomStringGenerator/branch/main/graph/badge.svg?token=840K6JYMT1)](https://codecov.io/gh/jshergal/StuceSoftware.RandomStringGenerator)
+![NuGet Version](https://img.shields.io/nuget/v/StuceSoftware.RandomStringGenerator)
+![NuGet Downloads](https://img.shields.io/nuget/dt/StuceSoftware.RandomStringGenerator)
+
+
+
 ## Introduction
 StuceSoftware.RandomStringGenerator is a library developed in C# to generate random strings of from various categories. It is fast and suports string generation of various length.  
 It is parameterized to generate both a single or a list of random strings.  
