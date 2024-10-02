@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net8.0;net9.0</TargetFrameworks>
+        <LangVersion>10</LangVersion>
+        <ImplicitUsings>true</ImplicitUsings>
+
+        <VersionPrefix>1.0.1</VersionPrefix>
+        <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>
+        <Company>Stuce Software Solutions</Company>
+        <Description>.NET library to generate random strings. This package is based on the original RandomString4Net package by Lakhya Jyoti Nath.</Description>
+        <Copyright>Copyright © 2020-2024</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageId>StuceSoftware.RandomStringGenerator</PackageId>
+        <PackageProjectUrl>https://github.com/jshergal/RandomString4Net</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/jshergal/RandomString4Net.git</RepositoryUrl>
+        <PackageTags>randomstringgenerator random string C# libray password generator passwordgenerator generation symbols randomsymbols lowercase uppercase mixedcase customsymbols randomnumber number</PackageTags>
+        <PackageReleaseNotes>
+        - Initial release after fork from RandomString4Net
+    </PackageReleaseNotes>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>DotNetRandomStringGenerator.icon.png</PackageIcon>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\..\images\DotNetRandomStringGenerator.icon.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+</Project>

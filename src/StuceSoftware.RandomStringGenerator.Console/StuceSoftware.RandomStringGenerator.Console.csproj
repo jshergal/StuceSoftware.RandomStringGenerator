@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net48;net6.0;net8.0</TargetFrameworks>
+        <LangVersion>10</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>
+        <Company>Stuce Software Solutions</Company>
+        <Description>Sample console application highlighting capabilities of the random string generator library</Description>
+        <Copyright>Copyright © 2020-2024</Copyright>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\StuceSoftware.RandomStringGenerator\StuceSoftware.RandomStringGenerator.csproj" />
+    </ItemGroup>
+
+</Project>

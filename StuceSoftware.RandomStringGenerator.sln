@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D976DB16-726E-46BB-B748-D54976D6ACFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuceSoftware.RandomStringGenerator", "src\StuceSoftware.RandomStringGenerator\StuceSoftware.RandomStringGenerator.csproj", "{B96D78F7-897D-40F5-9669-602475D14BD7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E2F26031-F591-4763-90AB-44DF73825A8C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuceSoftware.RandomStringGenerator.Tests", "test\StuceSoftware.RandomStringGenerator.Tests\StuceSoftware.RandomStringGenerator.Tests.csproj", "{469A0765-67FB-4A57-8009-90DFA1ACFA8B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuceSoftware.RandomStringGenerator.Console", "src\StuceSoftware.RandomStringGenerator.Console\StuceSoftware.RandomStringGenerator.Console.csproj", "{C45BCD2D-CDAF-4727-8731-BD708063D72B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B96D78F7-897D-40F5-9669-602475D14BD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B96D78F7-897D-40F5-9669-602475D14BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B96D78F7-897D-40F5-9669-602475D14BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B96D78F7-897D-40F5-9669-602475D14BD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{469A0765-67FB-4A57-8009-90DFA1ACFA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{469A0765-67FB-4A57-8009-90DFA1ACFA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{469A0765-67FB-4A57-8009-90DFA1ACFA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{469A0765-67FB-4A57-8009-90DFA1ACFA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C45BCD2D-CDAF-4727-8731-BD708063D72B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C45BCD2D-CDAF-4727-8731-BD708063D72B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C45BCD2D-CDAF-4727-8731-BD708063D72B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C45BCD2D-CDAF-4727-8731-BD708063D72B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B96D78F7-897D-40F5-9669-602475D14BD7} = {D976DB16-726E-46BB-B748-D54976D6ACFF}
+		{469A0765-67FB-4A57-8009-90DFA1ACFA8B} = {E2F26031-F591-4763-90AB-44DF73825A8C}
+		{C45BCD2D-CDAF-4727-8731-BD708063D72B} = {D976DB16-726E-46BB-B748-D54976D6ACFF}
+	EndGlobalSection
+EndGlobal
