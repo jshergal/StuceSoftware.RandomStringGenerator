@@ -162,6 +162,7 @@ public static class RandomStringGenerator
 
     private static List<String> getRandomStrings(Random randomInstance, string inputString, int count, int maxLength, bool randomLength, bool forceUnique)
     {
+        List<string> results = new List<string>();
         HashSet<string> randomStrings = new HashSet<string>();
 
         int inputStringLength = inputString.Length;
@@ -175,23 +176,22 @@ public static class RandomStringGenerator
             for (int j = 0; j < outputStringLength; j++)
                 currentRandomString.Append(inputString[randomInstance.Next(inputStringLength)]);
 
-            if (forceUnique && randomStrings.Contains(currentRandomString.ToString()))
-                continue;
-
-            randomStrings.Add(currentRandomString.ToString());
+            string randomString = currentRandomString.ToString();
+            if (!forceUnique || randomStrings.Add(randomString))
+                results.Add(randomString);
         }
 
-        List<string> finalRandomStrings = randomStrings.ToList();
-        return finalRandomStrings;
+        return results;
     }
 
     private static List<String> getRandomStrings(Random randomInstance, string[] inputStrings, int count, int maxLength, bool randomLength, bool forceUnique)
     {
+        List<string> results = new List<string>();
         HashSet<string> randomStrings = new HashSet<string>();
 
         int inputTypeIndex, inputStringLength, outputStringLength;
 
-        while (randomStrings.Count < count)
+        for (int i = 0; i < count; i++)
         {
             outputStringLength = randomLength ? randomInstance.Next(1, maxLength) : maxLength;
             StringBuilder currentRandomString = new StringBuilder();
@@ -204,12 +204,11 @@ public static class RandomStringGenerator
                 currentRandomString.Append(inputStrings[inputTypeIndex][randomInstance.Next(inputStringLength)]);
             }
 
-            if (forceUnique && randomStrings.Contains(currentRandomString.ToString()))
-                continue;
-            randomStrings.Add(currentRandomString.ToString());
+            string randomString = currentRandomString.ToString();
+            if (!forceUnique || randomStrings.Add(randomString))
+                results.Add(randomString);
         }
 
-        List<string> finalRandomStrings = randomStrings.ToList();
-        return finalRandomStrings;
+        return results;
     }
 }

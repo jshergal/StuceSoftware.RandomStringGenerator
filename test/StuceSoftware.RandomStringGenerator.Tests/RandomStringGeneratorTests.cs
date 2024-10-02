@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using StuceSoftware.RandomStringGenerator.Exceptions;
 using System;
+using System.Linq;
 
 namespace StuceSoftware.RandomStringGenerator.Tests;
 
@@ -195,8 +196,8 @@ public class RandomStringGeneratorTests
         var randomStrings = RandomStringGenerator.GetStrings(Types.NUMBERS, count: 2000, maxLength: 3, randomLength: false, forceUnique: false);
 
         // TODO: Reenable these assertions when the bug has been addressed
-        //randomStrings.Should().HaveCount(2000);
-        //randomStrings.Distinct().Count().Should().BeLessThanOrEqualTo(2000);
+        randomStrings.Should().HaveCount(2000);
+        randomStrings.Distinct().Count().Should().BeLessThanOrEqualTo(2000);
     }
 
     [Fact]
