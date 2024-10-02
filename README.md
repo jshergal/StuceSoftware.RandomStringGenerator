@@ -1,5 +1,5 @@
 # StuceSoftware.RandomStringGenerator
-### Version 1.0.1
+### Version 1.0.0
 
 Authors :
 Jeff Shergalis 
@@ -92,4 +92,4 @@ Thanks in advance !
 
 ## License
 
-Copyright © 2024 [Stuce Software Solutions](https://stucesoftware.com/) under the [MIT License](https://github.com/jshergal/RandomString4Net/blob/master/LICENSE).
+Copyright © 2024 [Stuce Software Solutions](https://stucesoftware.com/) under the [MIT License](https://github.com/jshergal/StuceSoftware.RandomStringGenerator/blob/main/LICENSE).

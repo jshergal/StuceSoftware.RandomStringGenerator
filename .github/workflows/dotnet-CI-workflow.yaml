@@ -1,0 +1,90 @@
+name: "Build and test"
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+
+  release:
+    types:
+      - published
+      
+jobs:
+  build_and_test:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+      TERM: xterm
+
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.x'
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore --version-suffix "prerelease.${{github.run_number}}"
+
+    - name: Test
+      run: dotnet test --collect:"XPlat Code Coverage" --no-build --verbosity normal
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true
+
+  deploy:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.x'
+
+    - name: Create Release NuGet package
+      if: github.event_name == 'release'
+      run: |
+          arrTag=(${GITHUB_REF//\// })
+          VERSION="${arrTag[2]}"
+          VERSION="${VERSION//v}"
+          echo Clean Version: $VERSION
+          dotnet pack src/StuceSoftware.RandomStringGenerator/StuceSoftware.RandomStringGenerator.csproj -v normal -c Release -p:PackageVersion=$VERSION -o .
+
+    - name: Create pre-release NuGet package
+      if: github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'main'
+      run: |
+          dotnet pack src/StuceSoftware.RandomStringGenerator/StuceSoftware.RandomStringGenerator.csproj --version-suffix "prerelease.${{github.run_number}}" -v normal -c Release -o .
+          
+    - name: Push to Nuget
+      run: |
+          dotnet nuget push *.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}}
