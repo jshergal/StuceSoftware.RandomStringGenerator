@@ -146,13 +146,13 @@ public static class RandomStringGenerator
         if (maxLength <= 0)
             throw new ArgumentOutOfRangeException(nameof(maxLength), "Length must be greater than zero");
 
-        byte[] randomSeeds = new byte[1];
+        byte[] randomSeeds = new byte[4];
 
         RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
         randomNumberGenerator.GetBytes(randomSeeds);
 
         // creating an instance of Random() using the random seed value
-        Random random = new Random(randomSeeds[0]);
+        Random random = new Random(BitConverter.ToInt32(randomSeeds, 0));
 
         if (!forceOccuranceOfEachType)
             return getRandomStrings(random, String.Join("", inputStrings), count, maxLength, randomLength, forceUnique);
