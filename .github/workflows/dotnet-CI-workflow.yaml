@@ -52,7 +52,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore --version-suffix "prerelease.${{github.run_number}}"
 
     - name: Test
-      run: dotnet test --collect:"XPlat Code Coverage" --no-build --verbosity normal
+      run: dotnet test --collect:"XPlat Code Coverage" --no-restore --verbosity normal
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
