@@ -195,7 +195,6 @@ public class RandomStringGeneratorTests
     {
         var randomStrings = RandomStringGenerator.GetStrings(Types.NUMBERS, count: 2000, maxLength: 3, randomLength: false, forceUnique: false);
 
-        // TODO: Reenable these assertions when the bug has been addressed
         randomStrings.Should().HaveCount(2000);
         randomStrings.Distinct().Count().Should().BeLessThanOrEqualTo(2000);
     }
@@ -203,126 +202,142 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateForceOccurrenceForAlphabetWithCustomSymbols()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHABET_LOWERCASE_WITH_SYMBOLS, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[a-z*&^%$#@!]{20}$"));
+                 .MatchRegex(@"^(?=.*[a-z])(?=.*[*&^%$#@!])[a-z*&^%$#@!]{20}$")
+                 );
         }
     }
 
     [Fact]
     public void ValidateForceOccurrenceForAlphabetUppercaseWithCustomSymbols()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHABET_UPPERCASE_WITH_SYMBOLS, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[A-Z*&^%$#@!]{20}$"));
+                 .MatchRegex(@"^(?=.*[A-Z])(?=.*[*&^%$#@!])[A-Z*&^%$#@!]{20}$")
+                 );
         }
     }
 
     [Fact]
     public void ValidateForceOccurrenceForAlphaNumericLowercase()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_LOWERCASE, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[a-z0-9]{20}$"));
+                 .MatchRegex(@"^(?=.*[a-z])(?=.*[0-9])[a-z0-9]{20}$")
+                 );
         }
     }
 
     [Fact]
     public void ValidateForceOccurrenceForAlphaNumericLowercaseWithCustomSymbols()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_LOWERCASE_WITH_SYMBOLS, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[a-z0-9*&^%$#@!]{20}$"));
+                 .MatchRegex(@"^(?=.*[a-z])(?=.*[0-9])(?=.*[*&^%$#@!])[a-z0-9*&^%$#@!]{20}$")
+                 );
         }
     }
 
     [Fact]
     public void ValidateForceOccurrenceForAlphaNumericUppercase()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_UPPERCASE, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[A-Z0-9]{20}$"));
+                 .MatchRegex(@"^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{20}$")
+                 );
         }
     }
 
     [Fact]
     public void ValidateForceOccurrenceForAlphaNumericUppercaseWithCustomSymbols()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_UPPERCASE_WITH_SYMBOLS, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[A-Z0-9*&^%$#@!]{20}$"));
+                 .MatchRegex(@"^(?=.*[A-Z])(?=.*[0-9])(?=.*[*&^%$#@!])[A-Z0-9*&^%$#@!]{20}$")
+                 );
         }
     }
 
     [Fact]
     public void ValidateForceOccurrenceForAlphaNumericMixedCase()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_MIXEDCASE, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[a-zA-Z0-9]{20}$"));
+                 .MatchRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{20}$")
+                 );
         }
     }
 
     [Fact]
-    public void ValidateForceOccurrenceForAlphaNumericMixedcaseWithCustomSymbols()
+    public void ValidateForceOccurrenceForAlphaNumericMixedCaseWithCustomSymbols()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_MIXEDCASE_WITH_SYMBOLS, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[a-zA-Z0-9*&^%$#@!]{20}$"));
+                 .MatchRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[*&^%$#@!])[a-zA-Z0-9*&^%$#@!]{20}$")
+                 );
         }
     }
 
     [Fact]
-    public void ValidateForceOccurrenceForAlphaNumericMixedcaseWithoutCustomSymbols()
+    public void ValidateForceOccurrenceForAlphaNumericMixedCaseWithoutCustomSymbols()
     {
-        // TODO: Update this test to ensure occurrence of each character type in output string
         for (var i = 0; i < 100; i++)
         {
             var randomStrings = RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_MIXEDCASE_WITH_SYMBOLS, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
-                 .MatchRegex(@"^[0-9a-zA-Z!#$%&'()*+,-.:;<=>?@[\]/\\|^_`{}~""]{20}$"));
+                 .MatchRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&'()*+,-.:;<=>?@[\]/\\|^_`{}~""])[a-zA-Z0-9!#$%&'()*+,-.:;<=>?@[\]/\\|^_`{}~""]{20}$")
+                 );
         }
+    }
+
+    [Fact]
+    public void ValidateGetStringForceOccurrenceForTypesThrowsExceptionWhenMaxLengthLessThanTypes()
+    {
+        var action = () => RandomStringGenerator.GetString(Types.ALPHANUMERIC_MIXEDCASE_WITH_SYMBOLS, maxLength: 3, forceOccuranceOfEachType: true);
+
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void ValidateGetStringsForceOccurrenceForTypesThrowsExceptionWhenMaxLengthLessThanTypes()
+    {
+        var action = () => RandomStringGenerator.GetStrings(Types.ALPHANUMERIC_MIXEDCASE_WITH_SYMBOLS, count: 10, maxLength: 3, forceOccurrenceOfEachType: true );
+
+        action.Should().Throw<ArgumentOutOfRangeException>();
     }
 }
