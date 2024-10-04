@@ -13,48 +13,36 @@ Date : September 2020 - October 2024
 ![NuGet Downloads](https://img.shields.io/nuget/dt/StuceSoftware.RandomStringGenerator)
 
 
-
 ## Introduction
-StuceSoftware.RandomStringGenerator is a library developed in C# to generate random strings of from various categories. It is fast and suports string generation of various length.  
-It is parameterized to generate both a single or a list of random strings.  
-Random strings can be of types alphabet and alphanumeric supporting all the cases viz. lower, upper and mixed.  
-It also supports symbol during the random string generation process. Following are the list of supported symbols:
-!#$%&'()*+,-./:;<=>?@[]\^_`{|}~"
-
-It also allows you to generate random string with only a subset of symbols from the above supported list. It is an ideal use for projects such as:  
+StuceSoftware.RandomStringGenerator is a library developed in C# to generate random strings of from various categories.
+It is fast and suports string generation of various length. It is parameterized to generate both a single or a list of random strings.  
+Random strings can be of types lowercase, uppercase, numbers and symbols. It also allows you to generate random string with only a
+subset of symbols from the supported list. It is an ideal library for use in projects such as:  
 * password generator
-* mobile number generator
 * unique-id generator
 * unique filename generator
 * raw data generator for data processing/parsing projects
-* fake name generator
-etc. etc.
+* *etc. etc.
 
 ## Features
 * Supports single or multiple random string generation 
 * Supports random string generation from alphabet, numbers, symbols or a combination of them
-* Supports customized length of randon string
+* Supports customized length of random string
 * Supports random length of generated strings with a fixed max length
 * Supports true unique random number generation
 * Support force inclusion of strings of each type
 * Supports .NET Standard 2.0 & 2.1, .NET 6.0, 8.0 & 9.0
 
 ## Supported Types
+* **Lowercase** : *abcdefghijklmnopqrstuvwxyz*
+* **Uppercase** : *ABCDEFGHIJKLMNOPQRSTUVWXYZ*
 * **Numbers** : *0123456789*
 * **Symbols** : *!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
-* **AlphabetLowercase** : *abcdefghijklmnopqrstuvwxyz*
-* **AlphabetUppercase** : *ABCDEFGHIJKLMNOPQRSTUVWXYZ*
-* **AlphabetMixedCase** : *abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ*
-* **ALPHANUMERICLowercase** : *abcdefghijklmnopqrstuvwxyz0123456789*
-* **ALPHANUMERICUppercase** : *ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*
-* **ALPHANUMERICMixedCase** : *abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*
-* **AlphabetLowercaseWithSymbols** : *abcdefghijklmnopqrstuvwxyz!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
-* **AlphabetUppercaseWithSymbols** : *ABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
-* **AlphabetMixedCaseWithSymbols** : *abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
-* **AlphanumericLowercaseWithSymbols** : *abcdefghijklmnopqrstuvwxyz0123456789!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
-* **AlphanumericUppercaseWithSymbols** : *ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
-* **AlphanumericMixedCaseWithSymbols** : *abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" !#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
 
+These types are defined by an enum `CharClasses` which has the `[Flags]` attribue, making it easy to combine the different classes.
+
+**:rotating_light: Breaking Change :rotating_light:**  
+The switch to a `[Flags]` enum is a breaking change in version 2.0
 
 ## Get Started
 ### 1. Install Package
@@ -68,29 +56,32 @@ PM> Install-Package StuceSoftware.RandomStringGenerator
 using StuceSoftware.RandomStringGenerator;
 
 // generating one random string from lowercase alphabets
-string randomString = RandomString.GetString(Types.AlphabetLowercase);
+var randomString = RandomString.GetString(CharClasses.Lowercase);
 System.Console.WriteLine(randomString);
 
 // generating 100 random string from all mixedcase alphabet, numbers and all supported symbols
-List<string> randomAlphaNumbericStrings = RandomString.GetStrings(Types.AlphanumericMixedCaseWithSymbols, 100);
+var randomAlphaNumbericStrings = RandomString.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, 100);
 foreach (string s in randomAlphaNumbericStrings)
     System.Console.WriteLine(s);
 
 // generating 200 random string from uppercase alphabet with custom symbols
-List<string> randomAlphabetWithCustomSymbols = RandomString.GetStrings(Types.AlphabetUppercase, 200, "/+*-");
+var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Uppercase, 200, "/+*-");
 foreach (string s in randomAlphabetWithCustomSymbols)
     System.Console.WriteLine(s);
 
 // generating 1000 true random strings of length 20 from uppercase alphabet with custom symbols
-List<string> trueUniqueRandomStrings = RandomString.GetStrings(Types.AlphabetUppercase, 1000, 20, false, true);
+var trueUniqueRandomStrings = RandomString.GetStrings(CharClasses.Uppercase, 1000, 20, "/+*-", false, true);
 foreach (string s in trueUniqueRandomStrings)
     System.Console.WriteLine(s);
 
 // generating 100 random string of mixedcase alphanummeric with custom symbols
-List<string> randomAlphabetWithCustomSymbols = RandomString.GetStrings(Types.AlphanumericMixedCaseWithSymbols, 100, "/+*-", forceOccuranceOfEachType: true);
+var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, 100, "/+*-", forceOccuranceOfEachType: true);
 foreach (string s in randomAlphabetWithCustomSymbols)
     System.Console.WriteLine(s);
 ```
+**:eyes: Note**  
+As of version 2.0, if custom symbols are defined, there is no need to specify the symbol character class (`CharClasses.Symbols`),
+this is assumed when custom symbols are provided
     
 ## Give a Star! ⭐️
 

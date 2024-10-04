@@ -5,7 +5,7 @@
         <LangVersion>10</LangVersion>
         <ImplicitUsings>true</ImplicitUsings>
 
-        <VersionPrefix>1.0.3</VersionPrefix>
+        <VersionPrefix>2.0.0</VersionPrefix>
         <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>
         <Company>Stuce Software Solutions</Company>
         <Description>.NET library to generate random strings. This package is based on the original RandomString4Net package by Lakhya Jyoti Nath.</Description>

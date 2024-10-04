@@ -31,69 +31,70 @@ using StuceSoftware.RandomStringGenerator.Exceptions;
 namespace StuceSoftware.RandomStringGenerator;
 
 /// <summary>
-///     Main class of the library containing the publically exposed methods and internal logic for random number generation
+///     Main class of the library containing the publicly exposed methods and internal logic for random number generation
 /// </summary>
 public static class RandomStringGenerator
 {
+    private const CharClasses SymbolMask = ~CharClasses.Symbols;
+
     /// <summary>
-    ///     Generates a random string of input type <c>types</c> having a maximum string length of <c>maxLength</c>
+    ///     Generates a random string of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c>
     /// </summary>
-    /// <param name="types">Type of RandomString4Net.Types is the type of input string for random string generation</param>
+    /// <param name="charClasses">Type of RandomString4Net.CharClasses is the type of input string for random string generation</param>
     /// <param name="maxLength">Maximum length of a random string to be generated; default is 10</param>
     /// <param name="randomLength">Boolean choice if the length of the generated random string should be random as well</param>
-    /// <param name="forceOccuranceOfEachType">
-    ///     Boolean choice to indicate if string of each sub-type should present in the
+    /// <param name="forceOccurrenceOfEachType">
+    ///     Boolean choice to indicate if string of each subtype should present in the
     ///     generated random string
     /// </param>
     /// <returns>A newly generated random string</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thown if <c>count</c> or <c>maxLenght</c> is less then or equal to 0</exception>
-    public static string GetString(Types types, int maxLength = 10, bool randomLength = false,
-        bool forceOccuranceOfEachType = false) => GetRandomStrings(types.GetString(), 1, maxLength, randomLength, false,
-        forceOccuranceOfEachType)[0];
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
+    public static string GetString(CharClasses charClasses, int maxLength = 10, bool randomLength = false,
+        bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetStrings(), 1, maxLength, randomLength, false,
+        forceOccurrenceOfEachType)[0];
 
     /// <summary>
-    ///     Generates a random string of input type <c>types</c> having a maximum string length of <c>maxLength</c> including
+    ///     Generates a random string of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c> including
     ///     symbols specified as <c>symbolsToInclude</c>
     /// </summary>
-    /// <param name="types">Type of RandomString4Net.Types is the type of input string for random string generation</param>
+    /// <param name="charClasses">Type of RandomString4Net.CharClasses is the type of input string for random string generation</param>
     /// <param name="symbolsToInclude">Subset of symbols from the list of supported symbols, specified as a string</param>
     /// <param name="maxLength">Maximum length of a random string to be generated; default is 10</param>
     /// <param name="randomLength">Boolean choice if the length of the generated random string should be random as well</param>
     /// <param name="forceOccurrenceOfEachType">
-    ///     Boolean choice to indicate if string of each sub-type should present in the
+    ///     Boolean choice to indicate if string of each subtype should present in the
     ///     generated random string
     /// </param>
     /// <returns>A newly generated random string</returns>
     /// <exception cref="UnsupportedSymbolException">
-    ///     Thown when the input subset of string is not present in the list of
+    ///     Thrown when the input subset of string is not present in the list of
     ///     supported symbols
     /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException">Thown if <c>count</c> or <c>maxLenght</c> is less then or equal to 0</exception>
-    public static string GetString(Types types, string symbolsToInclude, int maxLength = 10, bool randomLength = false,
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
+    public static string GetString(CharClasses charClasses, string symbolsToInclude, int maxLength = 10, bool randomLength = false,
         bool forceOccurrenceOfEachType = false)
     {
-        var inputStrings = new HashSet<string>();
-
-        foreach (var tempString in types.GetString())
-            // excluding symbols as custom symbols are specified
-        {
-            if (!tempString.Contains("@"))
-            {
-                inputStrings.Add(tempString);
-            }
-        }
-
         ValidateSymbols(symbolsToInclude);
-        inputStrings.Add(symbolsToInclude);
 
-        return GetRandomStrings(inputStrings.ToArray(), 1, maxLength, randomLength, false,
+        // excluding symbols as custom symbols are specified
+        charClasses &= SymbolMask;
+
+        var classCount = charClasses.GetClassCount();
+        var inputStrings = new string[classCount + 1];
+        Array.Copy(charClasses.GetStrings(), inputStrings, classCount);
+
+        // classCount is the last element since array size is classCount + 1
+        // if we drop netstandard2.0 support, we can use the indexer ^1
+        inputStrings[classCount] = symbolsToInclude;
+
+        return GetRandomStrings(inputStrings, 1, maxLength, randomLength, false,
             forceOccurrenceOfEachType)[0];
     }
 
     /// <summary>
-    ///     Generates a list of random strings of input type <c>types</c> having a maximum string length of <c>maxLength</c>
+    ///     Generates a list of random strings of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c>
     /// </summary>
-    /// <param name="types">Type of RandomString4Net.Types is the type of input string for random string generation</param>
+    /// <param name="charClasses">Type of RandomString4Net.CharClasses is the type of input string for random string generation</param>
     /// <param name="count">Number of random strings to be generated</param>
     /// <param name="maxLength">Maximum length of a random string to be generated; default is 10</param>
     /// <param name="randomLength">Boolean choice if the length of the generated random string should be random as well</param>
@@ -102,19 +103,19 @@ public static class RandomStringGenerator
     ///     set to true
     /// </param>
     /// <param name="forceOccurrenceOfEachType">
-    ///     Boolean choice to indicate if string of each sub-type should present in the
+    ///     Boolean choice to indicate if string of each subtype should present in the
     ///     generated random string
     /// </param>
     /// <returns>A list of random strings</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thown if <c>count</c> or <c>maxLenght</c> is less then or equal to 0</exception>
-    public static List<string> GetStrings(Types types, int count, int maxLength = 10, bool randomLength = false,
-        bool forceUnique = false, bool forceOccurrenceOfEachType = false) => GetRandomStrings(types.GetString(), count,
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
+    public static List<string> GetStrings(CharClasses charClasses, int count, int maxLength = 10, bool randomLength = false,
+        bool forceUnique = false, bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetStrings(), count,
         maxLength, randomLength, forceUnique, forceOccurrenceOfEachType);
 
     /// <summary>
-    ///     Generates a list of random strings of input type <c>types</c> having a maximum string length of <c>maxLength</c>
+    ///     Generates a list of random strings of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c>
     /// </summary>
-    /// <param name="types">Type of RandomString4Net.Types is the type of input string for random string generation</param>
+    /// <param name="charClasses">Type of RandomString4Net.CharClasses is the type of input string for random string generation</param>
     /// <param name="count">Number of random strings to be generated</param>
     /// <param name="symbolsToInclude">Subset of symbols from the list of supported symbols, specified as a string</param>
     /// <param name="maxLength">Maximum length of a random string to be generated; default is 10</param>
@@ -124,47 +125,46 @@ public static class RandomStringGenerator
     ///     set to true
     /// </param>
     /// <param name="forceOccurrenceOfEachType">
-    ///     Boolean choice to indicate if string of each sub-type should present in the
+    ///     Boolean choice to indicate if string of each subtype should present in the
     ///     generated random string
     /// </param>
     /// <returns>A list of random strings</returns>
     /// <exception cref="UnsupportedSymbolException">
-    ///     Thown when the input subset of string is not present in the list of
+    ///     Thrown when the input subset of string is not present in the list of
     ///     supported symbols
     /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException">Thown if <c>count</c> or <c>maxLenght</c> is less then or equal to 0</exception>
-    public static List<string> GetStrings(Types types, int count, string symbolsToInclude, int maxLength = 10,
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
+    public static List<string> GetStrings(CharClasses charClasses, int count, string symbolsToInclude, int maxLength = 10,
         bool randomLength = false, bool forceUnique = false, bool forceOccurrenceOfEachType = false)
     {
-        var inputStrings = new HashSet<string>();
-
-        foreach (var tempString in types.GetString())
-            // excluding symbols as custom symbols are specified
-        {
-            if (!tempString.Contains("@"))
-            {
-                inputStrings.Add(tempString);
-            }
-        }
-
         ValidateSymbols(symbolsToInclude);
-        inputStrings.Add(symbolsToInclude);
 
-        return GetRandomStrings(inputStrings.ToArray(), count, maxLength, randomLength, forceUnique,
+        // excluding symbols as custom symbols are specified
+        charClasses &= SymbolMask;
+
+        var classCount = charClasses.GetClassCount();
+        var inputStrings = new string[classCount + 1];
+        Array.Copy(charClasses.GetStrings(), inputStrings, classCount);
+
+        // classCount is the last element since array size is classCount + 1
+        // if we drop netstandard2.0 support, we can use the indexer ^1
+        inputStrings[classCount] = symbolsToInclude;
+
+        return GetRandomStrings(inputStrings, count, maxLength, randomLength, forceUnique,
             forceOccurrenceOfEachType);
     }
 
     /// <summary>
-    ///     Checks if all the symbols specified in <c>inputSybols</c> are present in the list of supported symbols
+    ///     Checks if all the symbols specified in <c>inputSymbols</c> are present in the list of supported symbols
     /// </summary>
     /// <param name="inputSymbols">String of symbols for validation </param>
     /// <exception cref="UnsupportedSymbolException">
-    ///     Thown when the input symbols are not present in the list of supported
+    ///     Thrown when the input symbols are not present in the list of supported
     ///     symbols
     /// </exception>
     private static void ValidateSymbols(string inputSymbols)
     {
-        if (!Regex.IsMatch(inputSymbols, $@"^[{DataSource.Symbols}]+$"))
+        if (string.IsNullOrEmpty(inputSymbols) || !Regex.IsMatch(inputSymbols, $@"^[{DataSource.Symbols}]+$"))
         {
             throw new UnsupportedSymbolException($"Input symbols should be a subset of {DataSource.Symbols}");
         }
@@ -182,11 +182,11 @@ public static class RandomStringGenerator
     ///     set to true
     /// </param>
     /// <param name="forceOccurrenceOfEachType">
-    ///     Boolean choice to indicate if string of each sub-type should present in the
+    ///     Boolean choice to indicate if string of each subtype should present in the
     ///     generated random string
     /// </param>
     /// <returns>A list of random strings</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thown if <c>count</c> or <c>maxLenght</c> is less then or equal to 0</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
     private static List<string> GetRandomStrings(string[] inputStrings, int count, int maxLength, bool randomLength,
         bool forceUnique, bool forceOccurrenceOfEachType)
     {

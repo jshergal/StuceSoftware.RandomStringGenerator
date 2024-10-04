@@ -29,7 +29,7 @@ using StuceSoftware.RandomStringGenerator;
 var sw = new Stopwatch();
 
 sw.Start();
-var randomString = RandomStringGenerator.GetString(Types.AlphabetLowercase);
+var randomString = RandomStringGenerator.GetString(CharClasses.Lowercase);
 sw.Stop();
 
 Console.WriteLine($"Generated 1 random string, time taken = {ElapsedMicroseconds():N} µs");
@@ -39,7 +39,7 @@ for (var i = 1; i <= 3; i++)
 {
     Console.WriteLine("\n");
     sw.Restart();
-    var randomStrings = RandomStringGenerator.GetStrings(Types.Numbers, i * 10);
+    var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers, i * 10);
     sw.Stop();
     Console.WriteLine(
         $"Generated a list of {i * 10} random strings of Type Numbers, time taken = {ElapsedMicroseconds():N} µs");
@@ -51,7 +51,8 @@ for (var i = 1; i <= 3; i++)
     Console.WriteLine("\n");
     sw.Restart();
     var randomStrings =
-        RandomStringGenerator.GetStrings(Types.AlphanumericMixedCase, i * 10, "+-*/", 20, forceUnique: true);
+        RandomStringGenerator.GetStrings(CharClasses.Numbers | CharClasses.Lowercase | CharClasses.Uppercase,
+            i * 10, "+-*/", 20, forceUnique: true);
     sw.Stop();
     Console.WriteLine(
         $"Generated a list of {randomStrings.Count} unique random strings of type AlphanumericMixedCase " +
@@ -63,7 +64,8 @@ for (var i = 1; i <= 3; i++)
 {
     Console.WriteLine("\n");
     sw.Restart();
-    var randomStrings = RandomStringGenerator.GetStrings(Types.AlphanumericMixedCaseWithSymbols, i * 10, "+-*/", 20,
+    var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers | CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Symbols, 
+        i * 10, "+-*/", 20,
         forceUnique: true, forceOccurrenceOfEachType: true);
     sw.Stop();
     Console.WriteLine(
@@ -77,7 +79,7 @@ sw.Reset();
 for (var i = 0; i < 100; i++)
 {
     sw.Start();
-    var randomNumbers = RandomStringGenerator.GetStrings(Types.Numbers, 100000, 10, false, true);
+    var randomNumbers = RandomStringGenerator.GetStrings(CharClasses.Numbers, 100000, 10, false, true);
     sw.Stop();
 
     var anyDuplicate = randomNumbers.GroupBy(x => x).Any(g => g.Count() > 1);
