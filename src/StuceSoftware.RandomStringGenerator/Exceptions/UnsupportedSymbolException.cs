@@ -22,25 +22,14 @@
 //
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
-using System;
 
 namespace StuceSoftware.RandomStringGenerator.Exceptions;
 
-[Serializable]
 public class UnsupportedSymbolException : Exception
 {
     public UnsupportedSymbolException() { }
 
     public UnsupportedSymbolException(string message) : base(message) { }
 
-    public UnsupportedSymbolException(string format, params object[] args) : base(string.Format(format, args)) { }
-
     public UnsupportedSymbolException(string message, Exception innerException) : base(message, innerException) { }
-
-    public UnsupportedSymbolException(string format, Exception innerException, params object[] args) : base(string.Format(format, args), innerException) { }
-
-#if !NET8_0_OR_GREATER
-    protected UnsupportedSymbolException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
-        : base(info, context) { }
-#endif
 }

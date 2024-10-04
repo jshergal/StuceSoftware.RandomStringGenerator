@@ -29,7 +29,7 @@ namespace StuceSoftware.RandomStringGenerator;
 /// </summary>
 internal static class DataSource
 {
-    internal static string Alphabets => "abcdefghijklmnopqrstuvwxyz";
-    internal static string Numbers => "0123456789";
-    internal static string Symbols => @"!#$%&'()*+,-./:;<=>?@[\]\\^_`{|}~""";
+    internal const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
+    internal const string Numbers = "0123456789";
+    internal const string Symbols = @"!#$%&'=()<>*+,-./:;?@[\]\\^_`{|}~""";
 }

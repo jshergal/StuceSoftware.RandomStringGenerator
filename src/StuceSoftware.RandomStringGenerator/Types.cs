@@ -22,133 +22,135 @@
 //
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
-using System;
 
 namespace StuceSoftware.RandomStringGenerator;
 
 /// <summary>
-/// Enum <c>Types</c> are the types of categories supported by the RandomString4Net library
+///     Enum <c>Types</c> are the types of categories supported by the RandomString4Net library
 /// </summary>
 public enum Types
 {
-    ALPHABET_LOWERCASE,
-    ALPHABET_LOWERCASE_WITH_SYMBOLS,
-    ALPHABET_UPPERCASE,
-    ALPHABET_UPPERCASE_WITH_SYMBOLS,
-    ALPHABET_MIXEDCASE,
-    ALPHABET_MIXEDCASE_WITH_SYMBOLS,
-    ALPHANUMERIC_LOWERCASE,
-    ALPHANUMERIC_LOWERCASE_WITH_SYMBOLS,
-    ALPHANUMERIC_UPPERCASE,
-    ALPHANUMERIC_UPPERCASE_WITH_SYMBOLS,
-    ALPHANUMERIC_MIXEDCASE,
-    ALPHANUMERIC_MIXEDCASE_WITH_SYMBOLS,
-    NUMBERS
+    AlphabetLowercase,
+    AlphabetLowercaseWithSymbols,
+    AlphabetUppercase,
+    AlphabetUppercaseWithSymbols,
+    AlphabetMixedCase,
+    AlphabetMixedCaseWithSymbols,
+    AlphanumericLowercase,
+    AlphanumericLowercaseWithSymbols,
+    AlphanumericUppercase,
+    AlphanumericUppercaseWithSymbols,
+    AlphanumericMixedCase,
+    AlphanumericMixedCaseWithSymbols,
+    Numbers
 }
+
 public static class TypesMethods
 {
     /// <summary>
-    /// Returns an array of string corresponding to the enum <c>Types</c>
+    ///     Returns an array of string corresponding to the enum <c>Types</c>
     /// </summary>
     /// <param name="types"><c>Types</c> for whose equivalent string needs to be constructed</param>
-    /// <returns>Arrray of string equivalent of Enum <c>Types</c></returns>
+    /// <returns>Array of string equivalent of Enum <c>Types</c></returns>
     public static string[] GetString(this Types types)
     {
         switch (types)
         {
-            case Types.ALPHABET_LOWERCASE:
-                return new string[]
+            case Types.AlphabetLowercase:
+                return new[]
                 {
-                    DataSource.Alphabets
+                    DataSource.Alphabet
                 };
 
-            case Types.ALPHABET_LOWERCASE_WITH_SYMBOLS:
-                return new string[] {
-                    DataSource.Alphabets,
+            case Types.AlphabetLowercaseWithSymbols:
+                return new[]
+                {
+                    DataSource.Alphabet,
                     DataSource.Symbols
                 };
 
-            case Types.ALPHABET_UPPERCASE:
-                return new string[]
+            case Types.AlphabetUppercase:
+                return new[]
                 {
-                    DataSource.Alphabets.ToUpper()
+                    DataSource.Alphabet.ToUpperInvariant()
                 };
 
-            case Types.ALPHABET_UPPERCASE_WITH_SYMBOLS:
-                return new string[]
+            case Types.AlphabetUppercaseWithSymbols:
+                return new[]
                 {
-                    DataSource.Alphabets.ToUpper(),
+                    DataSource.Alphabet.ToUpperInvariant(),
                     DataSource.Symbols
                 };
 
-            case Types.ALPHABET_MIXEDCASE:
-                return new string[]
+            case Types.AlphabetMixedCase:
+                return new[]
                 {
-                    DataSource.Alphabets,
-                    DataSource.Alphabets.ToUpper()
+                    DataSource.Alphabet,
+                    DataSource.Alphabet.ToUpperInvariant()
                 };
 
-            case Types.ALPHABET_MIXEDCASE_WITH_SYMBOLS:
-                return new string[]
+            case Types.AlphabetMixedCaseWithSymbols:
+                return new[]
                 {
-                    DataSource.Alphabets,
-                    DataSource.Alphabets.ToUpper(),
+                    DataSource.Alphabet,
+                    DataSource.Alphabet.ToUpperInvariant(),
                     DataSource.Symbols
                 };
 
-            case Types.ALPHANUMERIC_LOWERCASE:
-                return new string[]
+            case Types.AlphanumericLowercase:
+                return new[]
                 {
-                    DataSource.Alphabets,
+                    DataSource.Alphabet,
                     DataSource.Numbers
                 };
 
-            case Types.ALPHANUMERIC_LOWERCASE_WITH_SYMBOLS:
-                return new string[]
+            case Types.AlphanumericLowercaseWithSymbols:
+                return new[]
                 {
-                    DataSource.Alphabets,
+                    DataSource.Alphabet,
                     DataSource.Numbers,
                     DataSource.Symbols
                 };
 
-            case Types.ALPHANUMERIC_UPPERCASE:
-                return new string[]
+            case Types.AlphanumericUppercase:
+                return new[]
                 {
-                    DataSource.Alphabets.ToUpper(),
-                    DataSource.Numbers,
-                };
-
-            case Types.ALPHANUMERIC_UPPERCASE_WITH_SYMBOLS:
-                return new string[]
-                {
-                    DataSource.Alphabets.ToUpper(),
-                    DataSource.Numbers,
-                    DataSource.Symbols
-                };
-
-            case Types.ALPHANUMERIC_MIXEDCASE:
-                return new string[]
-                {
-                    DataSource.Alphabets,
-                    DataSource.Alphabets.ToUpper(),
+                    DataSource.Alphabet.ToUpperInvariant(),
                     DataSource.Numbers
                 };
 
-            case Types.ALPHANUMERIC_MIXEDCASE_WITH_SYMBOLS:
-                return new string[]
+            case Types.AlphanumericUppercaseWithSymbols:
+                return new[]
                 {
-                    DataSource.Alphabets,
-                    DataSource.Alphabets.ToUpper(),
+                    DataSource.Alphabet.ToUpperInvariant(),
                     DataSource.Numbers,
                     DataSource.Symbols
                 };
 
-            case Types.NUMBERS:
-                return new string[]
+            case Types.AlphanumericMixedCase:
+                return new[]
+                {
+                    DataSource.Alphabet,
+                    DataSource.Alphabet.ToUpperInvariant(),
+                    DataSource.Numbers
+                };
+
+            case Types.AlphanumericMixedCaseWithSymbols:
+                return new[]
+                {
+                    DataSource.Alphabet,
+                    DataSource.Alphabet.ToUpperInvariant(),
+                    DataSource.Numbers,
+                    DataSource.Symbols
+                };
+
+            case Types.Numbers:
+                return new[]
                 {
                     DataSource.Numbers
                 };
         }
-        return new string[] { String.Empty };
+
+        return new[] {string.Empty};
     }
 }
