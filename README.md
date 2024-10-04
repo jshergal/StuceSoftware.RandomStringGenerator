@@ -41,17 +41,16 @@ subset of symbols from the supported list. It is an ideal library for use in pro
 
 These types are defined by an enum `CharClasses` which has the `[Flags]` attribue, making it easy to combine the different classes.
 
-**:rotating_light: Breaking Change :rotating_light:**  
+**Breaking Change :rotating_light:**  
 The switch to a `[Flags]` enum is a breaking change in version 2.0
 
-## Get Started
-### 1. Install Package
-```ini
-PM> Install-Package StuceSoftware.RandomStringGenerator
-```
-### 2. Add reference in your project
+## Download and Install
+**NuGet Package [StuceSoftware.RandomStringGenerator](https://www.nuget.org/packages/StuceSoftware.RandomStringGenerator/)
 
-### 3. Call the methods in your program
+```powershell
+Install-Package StuceSoftware.RandomStringGenerator
+```
+### Sample Usage
 ```csharp
 using StuceSoftware.RandomStringGenerator;
 
@@ -59,34 +58,35 @@ using StuceSoftware.RandomStringGenerator;
 var randomString = RandomString.GetString(CharClasses.Lowercase);
 System.Console.WriteLine(randomString);
 
-// generating 100 random string from all mixedcase alphabet, numbers and all supported symbols
-var randomAlphaNumbericStrings = RandomString.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, 100);
+// generating 100 random strings using both upper and lower case alphabet, numbers and all supported symbols
+var randomAlphaNumbericStrings = RandomString.GetStrings(
+    CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, 100);
 foreach (string s in randomAlphaNumbericStrings)
     System.Console.WriteLine(s);
 
-// generating 200 random string from uppercase alphabet with custom symbols
+// generating 200 random string using uppercase alphabet and custom symbols
 var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Uppercase, 200, "/+*-");
 foreach (string s in randomAlphabetWithCustomSymbols)
     System.Console.WriteLine(s);
 
-// generating 1000 true random strings of length 20 from uppercase alphabet with custom symbols
+// generating 1000 true random strings of length 20 using uppercase alphabet with custom symbols
 var trueUniqueRandomStrings = RandomString.GetStrings(CharClasses.Uppercase, 1000, 20, "/+*-", false, true);
 foreach (string s in trueUniqueRandomStrings)
     System.Console.WriteLine(s);
 
-// generating 100 random string of mixedcase alphanummeric with custom symbols
-var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, 100, "/+*-", forceOccuranceOfEachType: true);
+// generating 100 random strings using both upper and lowercase alphabet, numbers and custom symbols
+var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers, 100, "/+*-", forceOccuranceOfEachType: true);
 foreach (string s in randomAlphabetWithCustomSymbols)
     System.Console.WriteLine(s);
 ```
-**:eyes: Note**  
+**Note :eyes:**  
 As of version 2.0, if custom symbols are defined, there is no need to specify the symbol character class (`CharClasses.Symbols`),
 this is assumed when custom symbols are provided
     
-## Give a Star! ⭐️
+## Give a Star! :star:
 
-If you find this repository useful, please give it a star.
-Thanks in advance !
+If you find this library helpful, please give it a star.
+Thanks in advance!
 
 ## License
 
