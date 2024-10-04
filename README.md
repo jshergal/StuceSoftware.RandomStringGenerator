@@ -22,7 +22,7 @@ subset of symbols from the supported list. It is an ideal library for use in pro
 * unique-id generator
 * unique filename generator
 * raw data generator for data processing/parsing projects
-* *etc. etc.
+* etc. etc.
 
 ## Features
 * Supports single or multiple random string generation 
