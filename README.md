@@ -45,7 +45,7 @@ These types are defined by an enum `CharClasses` which has the `[Flags]` attribu
 The switch to a `[Flags]` enum is a breaking change in version 2.0
 
 ## Download and Install
-**NuGet Package [StuceSoftware.RandomStringGenerator](https://www.nuget.org/packages/StuceSoftware.RandomStringGenerator/)
+**NuGet Package [StuceSoftware.RandomStringGenerator](https://www.nuget.org/packages/StuceSoftware.RandomStringGenerator/)**
 
 ```powershell
 Install-Package StuceSoftware.RandomStringGenerator
