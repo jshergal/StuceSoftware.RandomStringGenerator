@@ -1,5 +1,4 @@
 # StuceSoftware.RandomStringGenerator
-### Version 1.0.1
 
 Authors :
 Jeff Shergalis   
