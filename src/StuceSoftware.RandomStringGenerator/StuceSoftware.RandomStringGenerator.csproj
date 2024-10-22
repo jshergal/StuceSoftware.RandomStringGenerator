@@ -4,6 +4,7 @@
         <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net8.0;net9.0</TargetFrameworks>
         <LangVersion>10</LangVersion>
         <ImplicitUsings>true</ImplicitUsings>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
         <VersionPrefix>2.0.0</VersionPrefix>
         <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>

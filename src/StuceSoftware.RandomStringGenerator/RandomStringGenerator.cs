@@ -33,9 +33,13 @@ namespace StuceSoftware.RandomStringGenerator;
 /// <summary>
 ///     Main class of the library containing the publicly exposed methods and internal logic for random number generation
 /// </summary>
-public static class RandomStringGenerator
+public sealed class RandomStringGenerator
 {
     private const CharClasses SymbolMask = ~CharClasses.Symbols;
+
+    private IRandomSource _source = source;
+
+    public RandomStringGenerator(IRandomSource source) => _source = source;
 
     /// <summary>
     ///     Generates a random string of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c>
@@ -213,7 +217,7 @@ public static class RandomStringGenerator
             : GetRandomStringsInternal(random, string.Join("", inputStrings), count, maxLength, randomLength, forceUnique);
     }
 
-    private static List<string> GetRandomStringsInternal(Random randomInstance, string inputString, int count, int maxLength,
+    private List<string> GetRandomStringsInternal(string inputString, int count, int maxLength,
         bool randomLength, bool forceUnique)
     {
         var results = new List<string>();
@@ -223,12 +227,12 @@ public static class RandomStringGenerator
 
         for (var i = 0; i < count; i++)
         {
-            var outputStringLength = randomLength ? randomInstance.Next(1, maxLength) : maxLength;
+            var outputStringLength = randomLength ? _source.Next(1, maxLength) : maxLength;
             var currentRandomString = new StringBuilder();
 
             for (var j = 0; j < outputStringLength; j++)
             {
-                currentRandomString.Append(inputString[randomInstance.Next(inputStringLength)]);
+                currentRandomString.Append(inputString[_source.Next(inputStringLength)]);
             }
 
             var randomString = currentRandomString.ToString();
