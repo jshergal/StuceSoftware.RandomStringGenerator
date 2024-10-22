@@ -24,6 +24,7 @@
 //
 
 namespace StuceSoftware.RandomStringGenerator;
+
 public interface IRandomSource
 {
     public int Next(int maxValue);

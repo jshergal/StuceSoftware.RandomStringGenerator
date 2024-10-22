@@ -41,15 +41,22 @@ subset of symbols from the supported list. It is an ideal library for use in pro
 
 These types are defined by an enum `CharClasses` which has the `[Flags]` attribue, making it easy to combine the different classes.
 
-**Breaking Change :rotating_light:**  
-The switch to a `[Flags]` enum is a breaking change in version 2.0
+**Breaking Changes :rotating_light:**  
+
+#### v2.0
+Switched to a `[Flags]` enum for `CharClasses`
+
+### v3.0 (in pre-release)
+`RandomStringGenerator` class is now non-static. The constructor takes an `IRandomSource` object, which is used internally to generate random values.  
+There are two implementations of `IRandomSource` provided with the library: `SystemRandomSource` and `SecureRandomSource`.
 
 ## Download and Install
 **NuGet Package [StuceSoftware.RandomStringGenerator](https://www.nuget.org/packages/StuceSoftware.RandomStringGenerator/)**
 
 ```powershell
-Install-Package StuceSoftware.RandomStringGenerator
+dotnet add package StuceSoftware.RandomStringGenerator
 ```
+
 ### Sample Usage
 ```csharp
 using StuceSoftware.RandomStringGenerator;

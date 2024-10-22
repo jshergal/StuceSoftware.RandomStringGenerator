@@ -1,7 +1,4 @@
-﻿//
-// StuceSoftware.RandomStringGenerator - .NET library for random string generation
-//
-// Copyright 2020-2024 - Jeff Shergalis; Lakhya Nath
+﻿// Copyright 2020-2024 - Jeff Shergalis; Lakhya Nath
 //
 // Licensed under the MIT License - http://www.opensource.org/licenses/mit-license.php
 //
@@ -23,26 +20,10 @@
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
 
-using System.Runtime.CompilerServices;
+using StuceSoftware.RandomStringGenerator.RandomSourceImplementations;
 
-namespace StuceSoftware.RandomStringGenerator.RandomSourceImplementations;
-
-public sealed class SystemRandomSource : IRandomSource
+namespace StuceSoftware.RandomStringGenerator.Tests;
+public class RandomStringGeneratorWithSystemRandomTests : RandomStringGeneratorTestsBase
 {
-    private readonly Random _rand;
-
-    public SystemRandomSource(int? seed = null)
-    {
-#if NET6_0_OR_GREATER
-    _rand = seed is null ? Random.Shared : new Random(seed.Value);
-#else
-    _rand = seed is null ? new Random() : new Random(seed.Value);
-#endif
-}
-
-[MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int Next(int maxValue) => _rand.Next(maxValue);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int Next(int minValue, int maxValue) => _rand.Next(minValue, maxValue);
+    public RandomStringGeneratorWithSystemRandomTests() : base(new RandomStringGenerator(new SystemRandomSource())) { }
 }

@@ -1,7 +1,7 @@
 ﻿//
 // StuceSoftware.RandomStringGenerator - .NET library for random string generation
 //
-// Copyright 2024 - Jeff Shergalis;
+// Copyright 2020-2024 - Jeff Shergalis; Lakhya Nath
 //
 // Licensed under the MIT License - http://www.opensource.org/licenses/mit-license.php
 //
@@ -26,7 +26,7 @@
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
-namespace StuceSoftware.RandomStringGenerator;
+namespace StuceSoftware.RandomStringGenerator.RandomSourceImplementations;
 
 public sealed class SecureRandomSource : IRandomSource
 {
@@ -50,7 +50,7 @@ public sealed class SecureRandomSource : IRandomSource
     }
 
     #if NETSTANDARD2_0
-    // Code taken from .NET source to support older .netstandard 2.0
+    // Code based on .NET source code to support older .netstandard 2.0
     // Used under the MIT license 
     // https://github.com/dotnet/runtime/blob/741390a68500e54b11dc8958573ca900e76fd80d/src/libraries/System.Security.Cryptography/src/System/Security/Cryptography/RandomNumberGenerator.cs
     private static int GetInt32(int fromInclusive, int toExclusive)

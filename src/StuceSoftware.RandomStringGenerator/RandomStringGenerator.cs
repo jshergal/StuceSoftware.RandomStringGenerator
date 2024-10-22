@@ -23,7 +23,6 @@
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
 
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using StuceSoftware.RandomStringGenerator.Exceptions;
@@ -37,7 +36,7 @@ public sealed class RandomStringGenerator
 {
     private const CharClasses SymbolMask = ~CharClasses.Symbols;
 
-    private IRandomSource _source = source;
+    private readonly IRandomSource _source;
 
     public RandomStringGenerator(IRandomSource source) => _source = source;
 
@@ -53,7 +52,7 @@ public sealed class RandomStringGenerator
     /// </param>
     /// <returns>A newly generated random string</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
-    public static string GetString(CharClasses charClasses, int maxLength = 10, bool randomLength = false,
+    public string GetString(CharClasses charClasses, int maxLength = 10, bool randomLength = false,
         bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetStrings(), 1, maxLength, randomLength, false,
         forceOccurrenceOfEachType)[0];
 
@@ -75,7 +74,7 @@ public sealed class RandomStringGenerator
     ///     supported symbols
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
-    public static string GetString(CharClasses charClasses, string symbolsToInclude, int maxLength = 10, bool randomLength = false,
+    public string GetString(CharClasses charClasses, string symbolsToInclude, int maxLength = 10, bool randomLength = false,
         bool forceOccurrenceOfEachType = false)
     {
         ValidateSymbols(symbolsToInclude);
@@ -112,7 +111,7 @@ public sealed class RandomStringGenerator
     /// </param>
     /// <returns>A list of random strings</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
-    public static List<string> GetStrings(CharClasses charClasses, int count, int maxLength = 10, bool randomLength = false,
+    public List<string> GetStrings(CharClasses charClasses, int count, int maxLength = 10, bool randomLength = false,
         bool forceUnique = false, bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetStrings(), count,
         maxLength, randomLength, forceUnique, forceOccurrenceOfEachType);
 
@@ -138,7 +137,7 @@ public sealed class RandomStringGenerator
     ///     supported symbols
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
-    public static List<string> GetStrings(CharClasses charClasses, int count, string symbolsToInclude, int maxLength = 10,
+    public List<string> GetStrings(CharClasses charClasses, int count, string symbolsToInclude, int maxLength = 10,
         bool randomLength = false, bool forceUnique = false, bool forceOccurrenceOfEachType = false)
     {
         ValidateSymbols(symbolsToInclude);
@@ -191,7 +190,7 @@ public sealed class RandomStringGenerator
     /// </param>
     /// <returns>A list of random strings</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less then or equal to 0</exception>
-    private static List<string> GetRandomStrings(string[] inputStrings, int count, int maxLength, bool randomLength,
+    private List<string> GetRandomStrings(string[] inputStrings, int count, int maxLength, bool randomLength,
         bool forceUnique, bool forceOccurrenceOfEachType)
     {
         if (count <= 0)
@@ -204,17 +203,9 @@ public sealed class RandomStringGenerator
             throw new ArgumentOutOfRangeException(nameof(maxLength), "Length must be greater than zero");
         }
 
-        var randomSeeds = new byte[4];
-
-        var randomNumberGenerator = RandomNumberGenerator.Create();
-        randomNumberGenerator.GetBytes(randomSeeds);
-
-        // creating an instance of Random() using the random seed value
-        var random = new Random(BitConverter.ToInt32(randomSeeds, 0));
-
         return forceOccurrenceOfEachType
-            ? GetRandomStringsInternal(random, inputStrings, count, maxLength, randomLength, forceUnique)
-            : GetRandomStringsInternal(random, string.Join("", inputStrings), count, maxLength, randomLength, forceUnique);
+            ? GetRandomStringsInternal(inputStrings, count, maxLength, randomLength, forceUnique)
+            : GetRandomStringsInternal(string.Join("", inputStrings), count, maxLength, randomLength, forceUnique);
     }
 
     private List<string> GetRandomStringsInternal(string inputString, int count, int maxLength,
@@ -245,7 +236,7 @@ public sealed class RandomStringGenerator
         return results;
     }
 
-    private static List<string> GetRandomStringsInternal(Random randomInstance, string[] inputStrings, int count, int maxLength,
+    private List<string> GetRandomStringsInternal(string[] inputStrings, int count, int maxLength,
         bool randomLength, bool forceUnique)
     {
         if (maxLength < inputStrings.Length)
@@ -262,19 +253,19 @@ public sealed class RandomStringGenerator
 
         for (var i = 0; i < count; i++)
         {
-            var outputStringLength = randomLength ? randomInstance.Next(1, maxLength) : maxLength;
+            var outputStringLength = randomLength ? _source.Next(1, maxLength) : maxLength;
             var currentRandomString = new StringBuilder();
 
             for (var j = 0; j < outputStringLength; j++)
             {
-                currentRandomString.Append(source[randomInstance.Next(source.Length)]);
+                currentRandomString.Append(source[_source.Next(source.Length)]);
             }
 
             // Ensure at least one character from each character class
             foreach (var input in inputStrings)
             {
-                var index = randomInstance.Next(currentRandomString.Length);
-                currentRandomString.Insert(index, input[randomInstance.Next(input.Length)]);
+                var index = _source.Next(currentRandomString.Length);
+                currentRandomString.Insert(index, input[_source.Next(input.Length)]);
             }
 
             var randomString = currentRandomString.ToString();

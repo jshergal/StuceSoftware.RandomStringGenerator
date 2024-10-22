@@ -31,22 +31,16 @@ using System.Linq;
 
 namespace StuceSoftware.RandomStringGenerator.Tests;
 
-public class RandomStringGeneratorTests
+public abstract class RandomStringGeneratorTestsBase
 {
-    [Fact]
-    public void ValidateTypeGetString()
-    {
-        var numbersAsString = CharClasses.Numbers.GetStrings();
+    private readonly RandomStringGenerator _generator;
 
-        numbersAsString.Should().Satisfy(
-            s => s == "0123456789"
-        );
-    }
+    protected RandomStringGeneratorTestsBase(RandomStringGenerator generator) => _generator = generator;
 
     [Fact]
     public void ValidateSingleRandomString()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Lowercase);
+        var randomString = _generator.GetString(CharClasses.Lowercase);
 
         randomString.Should().NotBeNullOrEmpty();
         randomString.Length.Should().BeLessThanOrEqualTo(10);
@@ -55,7 +49,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateSingleRandomStringWithSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Lowercase, "+*-/");
+        var randomString = _generator.GetString(CharClasses.Lowercase, "+*-/");
 
         randomString.Should().MatchRegex(@"^[a-z+*-/]+$");
     }
@@ -63,7 +57,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateSingleRandomStringWithBadSymbols()
     {
-        var action = () => RandomStringGenerator.GetString(CharClasses.Lowercase, "+*-/₹");
+        var action = () => _generator.GetString(CharClasses.Lowercase, "+*-/₹");
 
         action.Should().Throw<UnsupportedSymbolException>();
     }
@@ -71,7 +65,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateSingleRandomStringOfInvalidLength()
     {
-        var action = () => RandomStringGenerator.GetString(CharClasses.Lowercase, 0);
+        var action = () => _generator.GetString(CharClasses.Lowercase, 0);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -79,7 +73,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateMultipleRandomStrings()
     {
-        var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase, 5);
+        var randomStrings = _generator.GetStrings(CharClasses.Lowercase, 5);
 
         randomStrings.Should().HaveCount(5);
     }
@@ -87,7 +81,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateMultipleRandomStringsOfBadCount()
     {
-        var action = () => RandomStringGenerator.GetStrings(CharClasses.Lowercase, 0);
+        var action = () => _generator.GetStrings(CharClasses.Lowercase, 0);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -95,7 +89,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateMultipleRandomStringsWithSymbols()
     {
-        var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Uppercase, 2, "+*-/");
+        var randomStrings = _generator.GetStrings(CharClasses.Uppercase, 2, "+*-/");
 
         randomStrings.Should().AllSatisfy(s => s.Should().MatchRegex(@"^[A-Z+*-/]+$"));
     }
@@ -103,7 +97,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateLowercaseAlphabet()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Lowercase);
+        var randomString = _generator.GetString(CharClasses.Lowercase);
 
         randomString.Should().MatchRegex(@"^[a-z]+$");
     }
@@ -111,7 +105,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateUppercaseAlphabet()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Uppercase);
+        var randomString = _generator.GetString(CharClasses.Uppercase);
 
         randomString.Should().MatchRegex(@"^[A-Z]+$");
     }
@@ -119,7 +113,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateMixedCaseAlphabet()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Uppercase | CharClasses.Lowercase);
+        var randomString = _generator.GetString(CharClasses.Uppercase | CharClasses.Lowercase);
 
         randomString.Should().MatchRegex(@"^[A-Za-z]+$");
     }
@@ -127,7 +121,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateLowercaseAlphabetWithCustomSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Lowercase, "*&^%$#@!", maxLength: 100);
+        var randomString = _generator.GetString(CharClasses.Lowercase, "*&^%$#@!", maxLength: 100);
 
         randomString.Should().MatchRegex(@"^[a-z*&^%$#@!]+$");
     }
@@ -135,7 +129,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateUppercaseAlphabetWithCustomSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Uppercase, "*&^%$#@!", maxLength: 100);
+        var randomString = _generator.GetString(CharClasses.Uppercase, "*&^%$#@!", maxLength: 100);
 
         randomString.Should().MatchRegex(@"^[A-Z*&^%$#@!]+$");
     }
@@ -143,7 +137,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateMixedCaseAlphabetWithCustomSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Uppercase | CharClasses.Lowercase, "*&^%$#@!", maxLength: 100);
+        var randomString = _generator.GetString(CharClasses.Uppercase | CharClasses.Lowercase, "*&^%$#@!", maxLength: 100);
 
         randomString.Should().MatchRegex(@"^[a-zA-Z*&^%$#@!]+$");
     }
@@ -151,7 +145,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateLowercaseAlphaNumericWithSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Lowercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 100);
+        var randomString = _generator.GetString(CharClasses.Lowercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 100);
 
         randomString.Should().MatchRegex(@"^[0-9a-z!#$%&'()*+,-./:;<=>?@[\]\\^_`{|}~""]+$");
     }
@@ -159,7 +153,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateUppercaseAlphaNumericWithSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 100);
+        var randomString = _generator.GetString(CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 100);
 
         randomString.Should().MatchRegex(@"^[0-9A-Z!#$%&'()*+,-./:;<=>?@[\]\\^_`{|}~""]+$");
     }
@@ -167,7 +161,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateMixedCaseAlphaNumericWithSymbols()
     {
-        var randomString = RandomStringGenerator.GetString(CharClasses.Uppercase | CharClasses.Lowercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 100);
+        var randomString = _generator.GetString(CharClasses.Uppercase | CharClasses.Lowercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 100);
 
         randomString.Should().MatchRegex(@"^[0-9a-zA-Z!#$%&'()*+,-./:;<=>?@[\]\\^_`{|}~""]+$");
     }
@@ -175,7 +169,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateRandomNumbers()
     {
-        var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers, 10);
+        var randomStrings = _generator.GetStrings(CharClasses.Numbers, 10);
 
         randomStrings.Should().AllSatisfy(s => s.Should().MatchRegex("^[0-9]+$"));
     }
@@ -183,7 +177,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateRandomNumbersOfMaxLength()
     {
-        var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers, 10, 20);
+        var randomStrings = _generator.GetStrings(CharClasses.Numbers, 10, 20);
 
         randomStrings.Should().AllSatisfy(s =>
             s.Should().HaveLength(20).And
@@ -194,7 +188,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateRandomNumbersOfRandomLength()
     {
-        var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers, 10, 15, true);
+        var randomStrings = _generator.GetStrings(CharClasses.Numbers, 10, 15, true);
 
         randomStrings.Should().AllSatisfy(s =>
         {
@@ -208,7 +202,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers, count: 2000, maxLength: 3, randomLength: false, forceUnique: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Numbers, count: 2000, maxLength: 3, randomLength: false, forceUnique: true);
 
             randomStrings.Should()
                          .HaveCountLessThan(1000).And
@@ -219,7 +213,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateDuplicatesWhenNoForceUnique()
     {
-        var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Numbers, count: 2000, maxLength: 3, randomLength: false, forceUnique: false);
+        var randomStrings = _generator.GetStrings(CharClasses.Numbers, count: 2000, maxLength: 3, randomLength: false, forceUnique: false);
 
         randomStrings.Should().HaveCount(2000);
         randomStrings.Distinct().Count().Should().BeLessThanOrEqualTo(2000);
@@ -230,7 +224,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Lowercase | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -244,7 +238,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Uppercase | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Uppercase | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -258,7 +252,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Numbers, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Lowercase | CharClasses.Numbers, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -272,7 +266,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Numbers, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Lowercase | CharClasses.Numbers, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -286,7 +280,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Uppercase | CharClasses.Numbers, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Uppercase | CharClasses.Numbers, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -300,7 +294,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -314,7 +308,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -328,7 +322,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, symbolsToInclude: "*&^%$#@!", count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -342,7 +336,7 @@ public class RandomStringGeneratorTests
     {
         for (var i = 0; i < 100; i++)
         {
-            var randomStrings = RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
+            var randomStrings = _generator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, count: 1000, maxLength: 20, forceUnique: false, forceOccurrenceOfEachType: true);
 
             randomStrings.Should().AllSatisfy(s =>
                 s.Should().HaveLength(20).And
@@ -354,7 +348,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateGetStringForceOccurrenceForTypesThrowsExceptionWhenMaxLengthLessThanTypes()
     {
-        var action = () => RandomStringGenerator.GetString(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 3, forceOccurrenceOfEachType: true);
+        var action = () => _generator.GetString(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, maxLength: 3, forceOccurrenceOfEachType: true);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -362,7 +356,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateGetStringsForceOccurrenceForTypesThrowsExceptionWhenMaxLengthLessThanTypes()
     {
-        var action = () => RandomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, count: 10, maxLength: 3, forceOccurrenceOfEachType: true );
+        var action = () => _generator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, count: 10, maxLength: 3, forceOccurrenceOfEachType: true );
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -370,7 +364,7 @@ public class RandomStringGeneratorTests
     [Fact]
     public void ValidateGetStringWithInvalidCharClassThrowsException()
     {
-        var action = () => RandomStringGenerator.GetString(charClasses: 0);
+        var action = () => _generator.GetString(charClasses: 0);
 
         action.Should().Throw<InvalidEnumArgumentException>();
     }
