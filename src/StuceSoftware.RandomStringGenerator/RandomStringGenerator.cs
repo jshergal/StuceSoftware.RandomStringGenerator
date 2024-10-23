@@ -36,9 +36,13 @@ public sealed class RandomStringGenerator
 {
     private const CharClasses SymbolMask = ~CharClasses.Symbols;
 
-    private readonly IRandomSource _source;
+    private readonly IRandomSource _randomSource;
 
-    public RandomStringGenerator(IRandomSource source) => _source = source;
+    /// <summary>
+    ///   Initializes a new instance of the <c>RandomStringGenerator</c> class with the specified <c>IRandomSource</c>
+    /// </summary>
+    /// <param name="randomSource">Random source object used in random string generation</param>
+    public RandomStringGenerator(IRandomSource randomSource) => _randomSource = randomSource;
 
     /// <summary>
     ///     Generates a random string of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c>
@@ -169,7 +173,7 @@ public sealed class RandomStringGenerator
     {
         if (string.IsNullOrEmpty(inputSymbols) || !Regex.IsMatch(inputSymbols, $@"^[{DataSource.Symbols}]+$"))
         {
-            throw new UnsupportedSymbolException($"Input symbols should be a subset of {DataSource.Symbols}");
+            throw new UnsupportedSymbolException($"Input symbols should be a subset of: {DataSource.Symbols}");
         }
     }
 
@@ -203,41 +207,12 @@ public sealed class RandomStringGenerator
             throw new ArgumentOutOfRangeException(nameof(maxLength), "Length must be greater than zero");
         }
 
-        return forceOccurrenceOfEachType
-            ? GetRandomStringsInternal(inputStrings, count, maxLength, randomLength, forceUnique)
-            : GetRandomStringsInternal(string.Join("", inputStrings), count, maxLength, randomLength, forceUnique);
-    }
-
-    private List<string> GetRandomStringsInternal(string inputString, int count, int maxLength,
-        bool randomLength, bool forceUnique)
-    {
-        var results = new List<string>();
-        var uniqueStrings = new HashSet<string>();
-
-        var inputStringLength = inputString.Length;
-
-        for (var i = 0; i < count; i++)
-        {
-            var outputStringLength = randomLength ? _source.Next(1, maxLength) : maxLength;
-            var currentRandomString = new StringBuilder();
-
-            for (var j = 0; j < outputStringLength; j++)
-            {
-                currentRandomString.Append(inputString[_source.Next(inputStringLength)]);
-            }
-
-            var randomString = currentRandomString.ToString();
-            if (!forceUnique || uniqueStrings.Add(randomString))
-            {
-                results.Add(randomString);
-            }
-        }
-
-        return results;
+        return GetRandomStringsInternal(inputStrings, count, maxLength, randomLength, forceUnique,
+            forceOccurrenceOfEachType);
     }
 
     private List<string> GetRandomStringsInternal(string[] inputStrings, int count, int maxLength,
-        bool randomLength, bool forceUnique)
+        bool randomLength, bool forceUnique, bool forceOccurrence)
     {
         if (maxLength < inputStrings.Length)
         {
@@ -248,24 +223,24 @@ public sealed class RandomStringGenerator
         var results = new List<string>();
         var uniqueStrings = new HashSet<string>();
 
-        maxLength -= inputStrings.Length;
+        if (forceOccurrence)
+            maxLength -= inputStrings.Length;
+
         var source = string.Join("", inputStrings);
 
         for (var i = 0; i < count; i++)
         {
-            var outputStringLength = randomLength ? _source.Next(1, maxLength) : maxLength;
-            var currentRandomString = new StringBuilder();
+            var outputStringLength = randomLength ? _randomSource.Next(1, maxLength) : maxLength;
+            var currentRandomString = GenerateRandomString(source, outputStringLength);
 
-            for (var j = 0; j < outputStringLength; j++)
+            if (forceOccurrence)
             {
-                currentRandomString.Append(source[_source.Next(source.Length)]);
-            }
-
-            // Ensure at least one character from each character class
-            foreach (var input in inputStrings)
-            {
-                var index = _source.Next(currentRandomString.Length);
-                currentRandomString.Insert(index, input[_source.Next(input.Length)]);
+                // Ensure at least one character from each character class
+                foreach (var input in inputStrings)
+                {
+                    var index = _randomSource.Next(currentRandomString.Length);
+                    currentRandomString.Insert(index, input[_randomSource.Next(input.Length)]);
+                }
             }
 
             var randomString = currentRandomString.ToString();
@@ -277,4 +252,16 @@ public sealed class RandomStringGenerator
 
         return results;
     }
+
+    private StringBuilder GenerateRandomString(string source, int length)
+    {
+        var sb = new StringBuilder();
+        for (var i = 0; i < length; ++i)
+        {
+            sb.Append(source[_randomSource.Next(source.Length)]);
+        }
+
+        return sb;
+    }
+
 }

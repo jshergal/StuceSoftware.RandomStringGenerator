@@ -58,31 +58,34 @@ dotnet add package StuceSoftware.RandomStringGenerator
 ```
 
 ### Sample Usage
-```csharp
+```cs
 using StuceSoftware.RandomStringGenerator;
+using StuceSoftware.RandomStringGenerator.RandomSourceImplementations;
+
+var randomStringGenerator = new RandomStringGenerator(new SystemRandomSource());
 
 // generating one random string from lowercase alphabets
-var randomString = RandomString.GetString(CharClasses.Lowercase);
+var randomString = randomStringGenerator.GetString(CharClasses.Lowercase);
 System.Console.WriteLine(randomString);
 
 // generating 100 random strings using both upper and lower case alphabet, numbers and all supported symbols
-var randomAlphaNumbericStrings = RandomString.GetStrings(
+var randomAlphaNumbericStrings = randomStringGenerator.GetStrings(
     CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers | CharClasses.Symbols, 100);
 foreach (string s in randomAlphaNumbericStrings)
     System.Console.WriteLine(s);
 
 // generating 200 random string using uppercase alphabet and custom symbols
-var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Uppercase, 200, "/+*-");
+var randomAlphabetWithCustomSymbols = randomStringGenerator.GetStrings(CharClasses.Uppercase, 200, "/+*-");
 foreach (string s in randomAlphabetWithCustomSymbols)
     System.Console.WriteLine(s);
 
 // generating 1000 true random strings of length 20 using uppercase alphabet with custom symbols
-var trueUniqueRandomStrings = RandomString.GetStrings(CharClasses.Uppercase, 1000, 20, "/+*-", false, true);
+var trueUniqueRandomStrings = randomStringGenerator.GetStrings(CharClasses.Uppercase, 1000, 20, "/+*-", false, true);
 foreach (string s in trueUniqueRandomStrings)
     System.Console.WriteLine(s);
 
 // generating 100 random strings using both upper and lowercase alphabet, numbers and custom symbols
-var randomAlphabetWithCustomSymbols = RandomString.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers, 100, "/+*-", forceOccuranceOfEachType: true);
+var randomAlphabetWithCustomSymbols = randomStringGenerator.GetStrings(CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Numbers, 100, "/+*-", forceOccuranceOfEachType: true);
 foreach (string s in randomAlphabetWithCustomSymbols)
     System.Console.WriteLine(s);
 ```
