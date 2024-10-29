@@ -28,70 +28,70 @@ using StuceSoftware.RandomStringGenerator;
 using StuceSoftware.RandomStringGenerator.RandomSourceImplementations;
 
 var randomStringGenerator = new RandomStringGenerator(new SystemRandomSource());
-var sw = new Stopwatch();
 
-sw.Start();
+var start = Stopwatch.GetTimestamp();
 var randomString = randomStringGenerator.GetString(CharClasses.Lowercase);
-sw.Stop();
+var elapsedTicks = ElapsedTicks(start);
 
-Console.WriteLine($"Generated 1 random string, time taken = {ElapsedMicroseconds():N} µs");
+Console.WriteLine($"Generated 1 random string, time taken = {ElapsedMicroseconds(elapsedTicks):N} µs");
 Console.WriteLine(randomString);
 
 for (var i = 1; i <= 3; i++)
 {
     Console.WriteLine("\n");
-    sw.Restart();
+    start = Stopwatch.GetTimestamp();
     var randomStrings = randomStringGenerator.GetStrings(CharClasses.Numbers, i * 10);
-    sw.Stop();
+    elapsedTicks = ElapsedTicks(start);
     Console.WriteLine(
-        $"Generated a list of {i * 10} random strings of Type Numbers, time taken = {ElapsedMicroseconds():N} µs");
+        $"Generated a list of {i * 10} random strings of Type Numbers, time taken = {ElapsedMicroseconds(elapsedTicks):N} µs");
     randomStrings.ForEach(str => Console.Write(str + ", "));
 }
 
 for (var i = 1; i <= 3; i++)
 {
     Console.WriteLine("\n");
-    sw.Restart();
+    start = Stopwatch.GetTimestamp();
     var randomStrings =
         randomStringGenerator.GetStrings(CharClasses.Numbers | CharClasses.Lowercase | CharClasses.Uppercase,
             i * 10, "+-*/", 20, forceUnique: true);
-    sw.Stop();
+    elapsedTicks = ElapsedTicks(start);
     Console.WriteLine(
         $"Generated a list of {randomStrings.Count} unique random strings of type AlphanumericMixedCase " +
-        $"with custom symbols, time taken = {ElapsedMicroseconds():N} µs");
+        $"with custom symbols, time taken = {ElapsedMicroseconds(elapsedTicks):N} µs");
     randomStrings.ForEach(str => Console.Write(str + ", "));
 }
 
 for (var i = 1; i <= 3; i++)
 {
     Console.WriteLine("\n");
-    sw.Restart();
+    start = Stopwatch.GetTimestamp();
     var randomStrings = randomStringGenerator.GetStrings(CharClasses.Numbers | CharClasses.Lowercase | CharClasses.Uppercase | CharClasses.Symbols, 
         i * 10, "+-*/", 20,
         forceUnique: true, forceOccurrenceOfEachType: true);
-    sw.Stop();
+    elapsedTicks = ElapsedTicks(start);
     Console.WriteLine(
         $"Generated a list of {randomStrings.Count} random strings of type AlphanumericMixedCaseWithSymbols with custom symbols " +
-        $"and forced occurrence of each type, time taken = {ElapsedMicroseconds():N} µs");
+        $"and forced occurrence of each type, time taken = {ElapsedMicroseconds(elapsedTicks):N} µs");
     randomStrings.ForEach(str => Console.Write(str + ", "));
 }
 
 Console.WriteLine("\n\nGenerating 100000 random string and checking for duplicates 100 times");
-sw.Reset();
+var totalElapsedTicks = 0L;
 for (var i = 0; i < 100; i++)
 {
-    sw.Start();
+    start = Stopwatch.GetTimestamp();
     var randomNumbers = randomStringGenerator.GetStrings(CharClasses.Numbers, 100000, 10, false, true);
-    sw.Stop();
+    totalElapsedTicks += ElapsedTicks(start);
 
     var anyDuplicate = randomNumbers.GroupBy(x => x).Any(g => g.Count() > 1);
     var allUnique = randomNumbers.GroupBy(x => x).All(g => g.Count() == 1);
 
     Console.WriteLine($"{i + 1}. duplicate = {anyDuplicate} ; unique = {allUnique}");
 }
-Console.WriteLine($"Time taken = {ElapsedMilliseconds():N} ms");
+Console.WriteLine($"Time taken = {ElapsedMilliseconds(totalElapsedTicks):N} ms");
 
 return;
 
-double ElapsedMilliseconds() => sw.ElapsedTicks * (1000.0 / Stopwatch.Frequency);
-double ElapsedMicroseconds() => sw.ElapsedTicks * (1000.0 * 1000.0 / Stopwatch.Frequency);
+double ElapsedMilliseconds(long ticks) => ticks * (1000.0 / Stopwatch.Frequency);
+double ElapsedMicroseconds(long ticks) => ticks * (1000.0 * 1000.0 / Stopwatch.Frequency);
+long ElapsedTicks(long begin) => Stopwatch.GetTimestamp() - begin;
