@@ -2,7 +2,7 @@
 
 Authors :
 Jeff Shergalis   
-Lakhya Jyoti Nath (ljnath)
+Lakhya Jyoti Nath (ljnath) [Author of RandomString4Net](https://github.com/ljnath/RandomString4Net)
 
 Date : September 2020 - October 2024  
 
@@ -14,10 +14,14 @@ Date : September 2020 - October 2024
 
 
 ## Introduction
-StuceSoftware.RandomStringGenerator is a library developed in C# to generate random strings of from various categories.
-It is fast and suports string generation of various length. It is parameterized to generate both a single or a list of random strings.  
-Random strings can be of types lowercase, uppercase, numbers and symbols. It also allows you to generate random string with only a
-subset of symbols from the supported list. It is an ideal library for use in projects such as:  
+StuceSoftware.RandomStringGenerator is a fork of [RandomString4Net](https://github.com/ljnath/RandomString4Net) that has been updated
+to support the latest .NET versions, along with other various quality of life and performance improvements. The library is developed in C#
+to provide a simple means of generating random strings from various categories. (Future roadmap will include the ability to pass in user defined
+collections of characters for generation)
+
+It is fast and supports string generation of various lengths. It can be used to generate either a single random string or a list of them.  
+Random strings can be of types lowercase, uppercase, numbers and symbols. It also allows you to generate random strings with only a subset of
+symbols from the supported list. It is an ideal library for use in projects such as:  
 * password generator
 * unique-id generator
 * unique filename generator
@@ -39,7 +43,7 @@ subset of symbols from the supported list. It is an ideal library for use in pro
 * **Numbers** : *0123456789*
 * **Symbols** : *!#$%&'()\*+,-./:;<=>?@[]\^_`{|}~"*
 
-These types are defined by an enum `CharClasses` which has the `[Flags]` attribue, making it easy to combine the different classes.
+These types are defined by an enum `CharClasses` which has the `[Flags]` attribute, making it easy to combine the different classes.
 
 **Breaking Changes :rotating_light:**  
 
@@ -96,9 +100,11 @@ this is assumed when custom symbols are provided
 ## Give a Star! :star:
 
 If you find this library helpful, please give it a star.
-Thanks in advance!
 
+Feel free to support the project here:  
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/jshergal)
+
+Thanks in advance!
 
 ## License
 
