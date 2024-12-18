@@ -98,6 +98,8 @@ this is assumed when custom symbols are provided
 If you find this library helpful, please give it a star.
 Thanks in advance!
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/jshergal)
+
 ## License
 
 Copyright © 2024 [Stuce Software Solutions](https://stucesoftware.com/) under the [MIT License](https://github.com/jshergal/StuceSoftware.RandomStringGenerator/blob/main/LICENSE).
