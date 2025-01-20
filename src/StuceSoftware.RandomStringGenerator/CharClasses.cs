@@ -24,8 +24,6 @@
 //
 
 using System.ComponentModel;
-using System.Numerics;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace StuceSoftware.RandomStringGenerator;
 
@@ -43,6 +41,8 @@ public enum CharClasses
 
 public static class CharClassesHelpers
 {
+    private static readonly string UpperCase = DataSource.Alphabet.ToUpperInvariant();
+
     /// <summary>
     ///     Returns an array of string corresponding to the enum <c>CharClasses</c>
     /// </summary>
@@ -60,7 +60,7 @@ public static class CharClassesHelpers
 
         if (charClass.HasFlag(CharClasses.Uppercase))
         {
-            dest[index++] = DataSource.Alphabet.ToUpperInvariant();
+            dest[index++] = UpperCase;
         }
 
         if (charClass.HasFlag(CharClasses.Numbers))
@@ -82,7 +82,7 @@ public static class CharClassesHelpers
     public static int GetClassCount(this CharClasses charClass)
     {
 #if !NETSTANDARD
-        return BitOperations.PopCount((uint) charClass);
+        return System.Numerics.BitOperations.PopCount((uint) charClass);
 #else
         return BitCount((uint)charClass);
 #endif

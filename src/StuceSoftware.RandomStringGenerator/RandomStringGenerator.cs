@@ -24,7 +24,6 @@
 //
 
 using System.Text;
-using System.Text.RegularExpressions;
 using StuceSoftware.RandomStringGenerator.Exceptions;
 
 namespace StuceSoftware.RandomStringGenerator;
@@ -81,7 +80,7 @@ public sealed class RandomStringGenerator
     public string GetString(CharClasses charClasses, string symbolsToInclude, int maxLength = 10, bool randomLength = false,
         bool forceOccurrenceOfEachType = false)
     {
-        ValidateSymbols(symbolsToInclude);
+        UtilityMethods.ValidateSymbols(symbolsToInclude);
 
         // excluding symbols as custom symbols are specified
         charClasses &= SymbolMask;
@@ -144,7 +143,7 @@ public sealed class RandomStringGenerator
     public List<string> GetStrings(CharClasses charClasses, int count, string symbolsToInclude, int maxLength = 10,
         bool randomLength = false, bool forceUnique = false, bool forceOccurrenceOfEachType = false)
     {
-        ValidateSymbols(symbolsToInclude);
+        UtilityMethods.ValidateSymbols(symbolsToInclude);
 
         // excluding symbols as custom symbols are specified
         charClasses &= SymbolMask;
@@ -159,22 +158,6 @@ public sealed class RandomStringGenerator
 
         return GetRandomStrings(inputStrings, count, maxLength, randomLength, forceUnique,
             forceOccurrenceOfEachType);
-    }
-
-    /// <summary>
-    ///     Checks if all the symbols specified in <c>inputSymbols</c> are present in the list of supported symbols
-    /// </summary>
-    /// <param name="inputSymbols">String of symbols for validation </param>
-    /// <exception cref="UnsupportedSymbolException">
-    ///     Thrown when the input symbols are not present in the list of supported
-    ///     symbols
-    /// </exception>
-    private static void ValidateSymbols(string inputSymbols)
-    {
-        if (string.IsNullOrEmpty(inputSymbols) || !Regex.IsMatch(inputSymbols, $@"^[{DataSource.Symbols}]+$"))
-        {
-            throw new UnsupportedSymbolException($"Input symbols should be a subset of: {DataSource.Symbols}");
-        }
     }
 
     /// <summary>
@@ -228,10 +211,11 @@ public sealed class RandomStringGenerator
 
         var source = string.Join("", inputStrings);
 
+        var currentRandomString = new StringBuilder();
         for (var i = 0; i < count; i++)
         {
             var outputStringLength = randomLength ? _randomSource.Next(1, maxLength) : maxLength;
-            var currentRandomString = GenerateRandomString(source, outputStringLength);
+            GenerateRandomString(source, outputStringLength, currentRandomString);
 
             if (forceOccurrence)
             {
@@ -248,20 +232,18 @@ public sealed class RandomStringGenerator
             {
                 results.Add(randomString);
             }
+
+            currentRandomString.Clear();
         }
 
         return results;
     }
 
-    private StringBuilder GenerateRandomString(string source, int length)
+    private void GenerateRandomString(string source, int length, StringBuilder dest)
     {
-        var sb = new StringBuilder();
         for (var i = 0; i < length; ++i)
         {
-            sb.Append(source[_randomSource.Next(source.Length)]);
+            dest.Append(source[_randomSource.Next(source.Length)]);
         }
-
-        return sb;
     }
-
 }
