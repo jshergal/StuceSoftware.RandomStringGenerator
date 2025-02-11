@@ -84,18 +84,18 @@ public static class CharClassesHelpers
 #if !NETSTANDARD
         return System.Numerics.BitOperations.PopCount((uint) charClass);
 #else
-        return BitCount((uint)charClass);
+        return SoftwareFallbackPopCount((uint)charClass);
 #endif
     }
 
 #if NETSTANDARD
     // Taken from .NET Source code file BitOperations.cs, under the MIT License
-    // https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs#L452
+    // https://github.com/dotnet/runtime/blob/ec118c7e798862fd69dc7fa6544c0d9849d32488/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs#L452
     //
     // Licensed to the .NET Foundation under one or more agreements.
     // The .NET Foundation licenses this file to you under the MIT license.
     //
-    private static int BitCount(uint value)
+    private static int SoftwareFallbackPopCount(uint value)
     {
         const uint c1 = 0x_55555555u;
         const uint c2 = 0x_33333333u;
