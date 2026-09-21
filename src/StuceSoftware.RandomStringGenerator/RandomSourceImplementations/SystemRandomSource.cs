@@ -23,6 +23,7 @@
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
 
+using System.Buffers;
 using System.Runtime.CompilerServices;
 
 namespace StuceSoftware.RandomStringGenerator.RandomSourceImplementations;
@@ -34,15 +35,28 @@ public sealed class SystemRandomSource : IRandomSource
     public SystemRandomSource(int? seed = null)
     {
 #if NET6_0_OR_GREATER
-    _rand = seed is null ? Random.Shared : new Random(seed.Value);
+        _rand = seed is null ? Random.Shared : new Random(seed.Value);
 #else
-    _rand = seed is null ? new Random() : new Random(seed.Value);
+        _rand = seed is null ? new Random() : new Random(seed.Value);
 #endif
-}
+    }
 
-[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next(int maxValue) => _rand.Next(maxValue);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next(int minValue, int maxValue) => _rand.Next(minValue, maxValue);
+
+#if NET8_0_OR_GREATER
+    public void GetItems<T>(ReadOnlySpan<T> source, Span<T> dest) => _rand.GetItems(source, dest);
+#else
+    public void GetItems<T>(ReadOnlySpan<T> source, Span<T> dest)
+    {
+        // Fallback to simple for loop for .NET Standard implementation
+        for (var i = 0; i < dest.Length; i++)
+        {
+            dest[i] = source[_rand.Next(source.Length)];
+        }
+    }
+#endif
 }

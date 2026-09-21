@@ -33,5 +33,7 @@ internal static class DataSource
     internal const string Numbers = "0123456789";
     internal const string Symbols = @"!#$%&'=()<>*+,-./:;?@[\]\\^_`{|}~""";
 
+    internal static readonly string UpperCase = Alphabet.ToUpperInvariant();
+
     internal static readonly int MaxLength = Alphabet.Length + Alphabet.Length + Numbers.Length + Symbols.Length;
 }

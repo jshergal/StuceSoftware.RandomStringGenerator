@@ -90,8 +90,21 @@ public sealed class SecureRandomSource : IRandomSource
  
         return (int)result + fromInclusive;
     }
+
+    public void GetItems<T>(ReadOnlySpan<T> source, Span<T> dest)
+    {
+        for (var i = 0; i < dest.Length; ++i)
+        {
+            dest[i] = source[GetInt32(source.Length)];
+        }
+    }
     #else
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int GetInt32(int fromInclusive, int toExclusive) => RandomNumberGenerator.GetInt32(fromInclusive, toExclusive);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void GetItems<T>(ReadOnlySpan<T> source, Span<T> dest) => RandomNumberGenerator.GetItems(source, dest);
+
     #endif
 }

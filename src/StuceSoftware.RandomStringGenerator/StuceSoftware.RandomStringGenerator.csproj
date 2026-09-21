@@ -2,12 +2,11 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
-        <LangVersion>10</LangVersion>
         <ImplicitUsings>true</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-        <VersionPrefix>3.0.4</VersionPrefix>
+        <VersionPrefix>4.0.0</VersionPrefix>
         <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>
         <Company>Stuce Software Solutions</Company>
         <Description>.NET library to generate random strings. This package is based on the original RandomString4Net package by Lakhya Jyoti Nath.</Description>
@@ -19,10 +18,10 @@
         <RepositoryUrl>https://github.com/jshergal/StuceSoftware.RandomStringGenerator.git</RepositoryUrl>
         <PackageTags>randomstringgenerator random string C# libray password generator passwordgenerator generation symbols randomsymbols lowercase uppercase mixedcase customsymbols randomnumber number</PackageTags>
         <PackageReleaseNotes>
-        - RandomStringGenerator class is no longer static, but rather takes an IRandomSource object in the constructor. This allows for easier testing and
-        for providing your own random generator to the class. Along with this change two generators are provided. One using System.Random and the other
-        using the secure RandomNumberGenerator.
-    </PackageReleaseNotes>
+            - RandomStringGenerator class is no longer static, but rather takes an IRandomSource object in the constructor. This allows for easier testing and
+            for providing your own random generator to the class. Along with this change two generators are provided. One using System.Random and the other
+            using the secure RandomNumberGenerator.
+        </PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -30,6 +29,20 @@
         <IncludeSymbols>false</IncludeSymbols>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
+
+    <Choose>
+        <When Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
+            <PropertyGroup>
+                <LangVersion>13</LangVersion>
+            </PropertyGroup>
+        </When>
+        <Otherwise>
+            <PropertyGroup>
+                <LangVersion>11</LangVersion>
+            </PropertyGroup>
+        </Otherwise>
+    </Choose>
+
     <ItemGroup>
         <None Include="..\..\README.md">
             <Pack>True</Pack>
@@ -41,7 +54,7 @@
         </None>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-      <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.12" />
-      <PackageReference Include="System.Memory" Version="4.6.3" />
-    </ItemGroup> 
+        <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.12"/>
+        <PackageReference Include="System.Memory" Version="4.6.3"/>
+    </ItemGroup>
 </Project>

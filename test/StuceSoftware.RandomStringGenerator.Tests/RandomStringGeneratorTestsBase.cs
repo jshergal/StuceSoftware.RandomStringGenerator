@@ -369,4 +369,69 @@ public abstract class RandomStringGeneratorTestsBase
 
         action.Should().Throw<InvalidEnumArgumentException>();
     }
+
+    [Fact]
+    public void ValidateGetRandomStringWithDefaultParameters()
+    {
+        var randomString = _generator.GetRandomString("abc".AsSpan());
+
+        randomString.Should().HaveLength(10);
+        randomString.Should().MatchRegex(@"^[abc]+$");
+    }
+
+    [Fact]
+    public void ValidateGetRandomStringWithSpecifiedLength()
+    {
+        var randomString = _generator.GetRandomString("abcdef123456".AsSpan(), 25);
+
+        randomString.Should().HaveLength(25);
+        randomString.Should().MatchRegex(@"^[a-f0-9]+$");
+    }
+
+    [Fact]
+    public void ValidateGetRandomStringWithRandomLength()
+    {
+        for (var i = 0; i < 100; i++)
+        {
+            var randomString = _generator.GetRandomString("0123456789".AsSpan(), 15, true);
+
+            randomString.Length.Should().BeInRange(1, 15);
+            randomString.Should().MatchRegex(@"^[0-9]+$");
+        }
+    }
+
+    [Fact]
+    public void ValidateGetRandomStringFromCustomCharacterSource()
+    {
+        var randomString = _generator.GetRandomString("!@#$%^&*()_+".AsSpan(), 50);
+
+        randomString.Should().HaveLength(50);
+        randomString.Should().MatchRegex(@"^[!@#$%^&*()_+]+$");
+    }
+
+    [Fact]
+    public void ValidateGetRandomStringWithSingleCharacterSource()
+    {
+        var randomString = _generator.GetRandomString("A".AsSpan(), 10);
+
+        randomString.Should().Be("AAAAAAAAAA");
+    }
+
+    [Fact]
+    public void ValidateGetRandomStringWithSpan()
+    {
+        var randomString = _generator.GetRandomString("abcdef".AsSpan(), 12);
+
+        randomString.Should().HaveLength(12);
+        randomString.Should().MatchRegex(@"^[a-f]+$");
+    }
+
+    [Fact]
+    public void ValidateGetRandomStringLengthOne()
+    {
+        var randomString = _generator.GetRandomString("XYZ".AsSpan(), 1, false);
+
+        randomString.Should().HaveLength(1);
+        randomString.Should().MatchRegex(@"^[XYZ]$");
+    }
 }

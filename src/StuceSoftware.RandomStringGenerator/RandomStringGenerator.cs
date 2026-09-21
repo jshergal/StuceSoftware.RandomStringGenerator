@@ -44,6 +44,30 @@ public sealed class RandomStringGenerator
     /// <param name="randomSource">Random source object used in random string generation</param>
     public RandomStringGenerator(IRandomSource randomSource) => _randomSource = randomSource;
 
+    public string GetRandomString(ReadOnlySpan<char> source, int maxLength = 10, bool randomLength = false)
+    {
+        var outputStringLength = randomLength ? _randomSource.Next(1, maxLength) : maxLength;
+
+#if NET9_0_OR_GREATER
+        return string.Create(outputStringLength, source, (dest, choices) =>
+        {
+            _randomSource.GetItems(choices, dest);
+        });
+#else
+        var result = new string('\0', outputStringLength);
+        unsafe
+        {
+            fixed (char* buffer = result)
+            {
+                var span = new Span<char>(buffer, outputStringLength);
+                _randomSource.GetItems(source, span);
+            }
+        }
+
+        return result;
+#endif
+    }
+
     /// <summary>
     ///     Generates a random string of input type <c>charClasses</c> having a maximum string length of <c>maxLength</c>
     /// </summary>
@@ -57,7 +81,8 @@ public sealed class RandomStringGenerator
     /// <returns>A newly generated random string</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less than or equal to 0</exception>
     public string GetString(CharClasses charClasses, int maxLength = 10, bool randomLength = false,
-        bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetCharClasses(), 1, maxLength, randomLength, false,
+        bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetCharClasses(), 1, maxLength,
+        randomLength, false,
         forceOccurrenceOfEachType)[0];
 
     /// <summary>
@@ -78,7 +103,8 @@ public sealed class RandomStringGenerator
     ///     supported symbols
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less than or equal to 0</exception>
-    public string GetString(CharClasses charClasses, string symbolsToInclude, int maxLength = 10, bool randomLength = false,
+    public string GetString(CharClasses charClasses, string symbolsToInclude, int maxLength = 10,
+        bool randomLength = false,
         bool forceOccurrenceOfEachType = false)
     {
         UtilityMethods.ValidateSymbols(symbolsToInclude);
@@ -116,7 +142,8 @@ public sealed class RandomStringGenerator
     /// <returns>A list of random strings</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less than or equal to 0</exception>
     public List<string> GetStrings(CharClasses charClasses, int count, int maxLength = 10, bool randomLength = false,
-        bool forceUnique = false, bool forceOccurrenceOfEachType = false) => GetRandomStrings(charClasses.GetCharClasses(), count,
+        bool forceUnique = false, bool forceOccurrenceOfEachType = false) => GetRandomStrings(
+        charClasses.GetCharClasses(), count,
         maxLength, randomLength, forceUnique, forceOccurrenceOfEachType);
 
     /// <summary>
@@ -186,7 +213,8 @@ public sealed class RandomStringGenerator
     /// </param>
     /// <returns>A list of random strings</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <c>count</c> or <c>maxLength</c> is less than or equal to 0</exception>
-    private List<string> GetRandomStrings(ReadOnlySpan<string?> inputStrings, int count, int maxLength, bool randomLength,
+    private List<string> GetRandomStrings(ReadOnlySpan<string?> inputStrings, int count, int maxLength,
+        bool randomLength,
         bool forceUnique, bool forceOccurrenceOfEachType)
     {
         if (count <= 0)

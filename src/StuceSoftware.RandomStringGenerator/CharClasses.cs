@@ -24,6 +24,7 @@
 //
 
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace StuceSoftware.RandomStringGenerator;
 
@@ -41,16 +42,14 @@ public enum CharClasses
 
 public static class CharClassesHelpers
 {
-    private static readonly string UpperCase = DataSource.Alphabet.ToUpperInvariant();
-
     /// <summary>
-    ///     Returns an array of string corresponding to the enum <c>CharClasses</c>
+    ///     Returns an array of strings corresponding to the enum <c>CharClasses</c>
     /// </summary>
     /// <param name="charClass"><c>CharClasses</c> for whose equivalent string needs to be constructed</param>
     /// <returns>Array of string equivalent of Enum <c>CharClasses</c></returns>
     public static string[] GetCharClasses(this CharClasses charClass)
     {
-        var dest = new string[GetClassCount(charClass)];
+        var dest = new string[charClass.GetClassCount()];
 
         PopulateCharClassesInternal(charClass, dest);
 
@@ -65,22 +64,22 @@ public static class CharClassesHelpers
     {
         var index = 0;
 
-        if (charClass.HasFlag(CharClasses.Lowercase))
+        if (charClass.ContainsFlag(CharClasses.Lowercase))
         {
             dest[index++] = DataSource.Alphabet;
         }
 
-        if (charClass.HasFlag(CharClasses.Uppercase))
+        if (charClass.ContainsFlag(CharClasses.Uppercase))
         {
-            dest[index++] = UpperCase;
+            dest[index++] = DataSource.UpperCase;
         }
 
-        if (charClass.HasFlag(CharClasses.Numbers))
+        if (charClass.ContainsFlag(CharClasses.Numbers))
         {
             dest[index++] = DataSource.Numbers;
         }
 
-        if (charClass.HasFlag(CharClasses.Symbols))
+        if (charClass.ContainsFlag(CharClasses.Symbols))
         {
             dest[index++] = DataSource.Symbols;
         }
@@ -98,8 +97,11 @@ public static class CharClassesHelpers
 #endif
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool ContainsFlag(this CharClasses charClass, CharClasses flag) => (charClass & flag) == flag;
+
 #if NETSTANDARD
-    // Taken from .NET Source code file BitOperations.cs, under the MIT License
+    // Taken from the .NET Source code file BitOperations.cs, under the MIT License
     // https://github.com/dotnet/runtime/blob/ec118c7e798862fd69dc7fa6544c0d9849d32488/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs#L452
     //
     // Licensed to the .NET Foundation under one or more agreements.

@@ -30,4 +30,6 @@ public interface IRandomSource
     public int Next(int maxValue);
 
     public int Next(int minValue, int maxValue);
+    
+    public void GetItems<T>(ReadOnlySpan<T> source, Span<T> dest);
 }
