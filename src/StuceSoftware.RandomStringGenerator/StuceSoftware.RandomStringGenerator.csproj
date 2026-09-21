@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
         <LangVersion>10</LangVersion>
         <ImplicitUsings>true</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-        <VersionPrefix>3.0.2</VersionPrefix>
+        <VersionPrefix>3.0.3</VersionPrefix>
         <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>
         <Company>Stuce Software Solutions</Company>
         <Description>.NET library to generate random strings. This package is based on the original RandomString4Net package by Lakhya Jyoti Nath.</Description>
-        <Copyright>Copyright © 2020-2024</Copyright>
+        <Copyright>Copyright © 2020-2026</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageId>StuceSoftware.RandomStringGenerator</PackageId>
         <PackageProjectUrl>https://github.com/jshergal/StuceSoftware.RandomStringGenerator</PackageProjectUrl>
@@ -38,4 +40,8 @@
             <PackagePath>\</PackagePath>
         </None>
     </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+      <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.12" />
+      <PackageReference Include="System.Memory" Version="4.6.3" />
+    </ItemGroup> 
 </Project>

@@ -43,7 +43,7 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.x'
+        dotnet-version: '10.x'
 
     - name: Restore
       run: dotnet restore
@@ -69,7 +69,7 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.x'
+        dotnet-version: '10.x'
 
     - name: Create Release NuGet package
       if: github.event_name == 'release'
@@ -85,6 +85,13 @@ jobs:
       run: |
           dotnet pack src/StuceSoftware.RandomStringGenerator/StuceSoftware.RandomStringGenerator.csproj --version-suffix "prerelease.${{github.run_number}}" -v normal -c Release -o .
           
+      # Get a short-lived NuGet API key
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{secrets.NUGET_USER}}
+
     - name: Push to Nuget
       run: |
-          dotnet nuget push *.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}}
+          dotnet nuget push *.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key ${{steps.login.outputs.NUGET_API_KEY}}

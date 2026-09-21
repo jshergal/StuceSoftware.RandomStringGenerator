@@ -20,7 +20,7 @@
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
 
-using FluentAssertions;
+using AwesomeAssertions;
 
 namespace StuceSoftware.RandomStringGenerator.Tests;
 public class CharClassesTests
@@ -33,7 +33,7 @@ public class CharClassesTests
     [Fact]
     public void WhenCharClassesNumbersGetStrings_ThenReturnsDigitString()
     {
-        var numbersAsString = CharClasses.Numbers.GetStrings();
+        var numbersAsString = CharClasses.Numbers.GetCharClasses();
 
         numbersAsString.Should().Satisfy(
             s => s == Digits
@@ -43,7 +43,7 @@ public class CharClassesTests
     [Fact]
     public void WhenCharClassesLowercaseGetStrings_ThenReturnsLowercaseAlphabetString()
     {
-        var lowercaseAsString = CharClasses.Lowercase.GetStrings();
+        var lowercaseAsString = CharClasses.Lowercase.GetCharClasses();
 
         lowercaseAsString.Should().Satisfy(
             s => s == Lowercase
@@ -53,7 +53,7 @@ public class CharClassesTests
     [Fact]
     public void WhenCharClassesUppercaseGetStrings_ThenReturnsUppercaseAlphabetString()
     {
-        var uppercaseAsString = CharClasses.Uppercase.GetStrings();
+        var uppercaseAsString = CharClasses.Uppercase.GetCharClasses();
 
         uppercaseAsString.Should().Satisfy(
             s => s == Uppercase
@@ -63,7 +63,7 @@ public class CharClassesTests
     [Fact]
     public void WhenCharClassesSymbolsGetStrings_ThenReturnsSymbolsAlphabetString()
     {
-        var symbolsAsString = CharClasses.Symbols.GetStrings();
+        var symbolsAsString = CharClasses.Symbols.GetCharClasses();
 
         symbolsAsString.Should().Satisfy(
             s => s == Symbols
@@ -74,7 +74,7 @@ public class CharClassesTests
     public void WhenCharClassesSymbolsAndNumbersGetStrings_ThenReturnsSymbolsAndNumbers()
     {
         const CharClasses numbersAndSymbols = CharClasses.Numbers | CharClasses.Symbols;
-        var results = numbersAndSymbols.GetStrings();
+        var results = numbersAndSymbols.GetCharClasses();
 
         results.Should().HaveCount(2).And
                .OnlyHaveUniqueItems().And
@@ -85,7 +85,7 @@ public class CharClassesTests
     public void WhenCharClassesLowerAndUppercaseGetStrings_ThenReturnsLowerAndUppercase()
     {
         const CharClasses lowerAndUppercase = CharClasses.Lowercase | CharClasses.Uppercase;
-        var results = lowerAndUppercase.GetStrings();
+        var results = lowerAndUppercase.GetCharClasses();
 
         results.Should().HaveCount(2).And
                .OnlyHaveUniqueItems().And
@@ -96,7 +96,7 @@ public class CharClassesTests
     public void WhenCharClassesAllGetStrings_ThenReturnsAllClasses()
     {
         const CharClasses allCharClasses = CharClasses.Numbers | CharClasses.Symbols | CharClasses.Lowercase | CharClasses.Uppercase;
-        var results = allCharClasses.GetStrings();
+        var results = allCharClasses.GetCharClasses();
 
         results.Should().HaveCount(4).And
                .OnlyHaveUniqueItems().And

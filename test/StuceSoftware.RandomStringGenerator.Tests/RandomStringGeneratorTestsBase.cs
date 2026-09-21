@@ -23,7 +23,8 @@
 // project: https://github.com/jshergal/StuceSoftware.RandomStringGenerator
 //
 
-using FluentAssertions;
+using AwesomeAssertions;
+
 using StuceSoftware.RandomStringGenerator.Exceptions;
 using System;
 using System.ComponentModel;

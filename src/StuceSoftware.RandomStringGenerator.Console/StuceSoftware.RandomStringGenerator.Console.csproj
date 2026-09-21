@@ -2,14 +2,14 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net481;net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>net481;net9.0;net10.0</TargetFrameworks>
         <LangVersion>10</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
 
         <Authors>Jeff Shergalis;Lakhya Jyoti Nath</Authors>
         <Company>Stuce Software Solutions</Company>
         <Description>Sample console application highlighting capabilities of the random string generator library</Description>
-        <Copyright>Copyright © 2020-2024</Copyright>
+        <Copyright>Copyright © 2020-2026</Copyright>
     </PropertyGroup>
 
     <ItemGroup>

@@ -48,9 +48,21 @@ public static class CharClassesHelpers
     /// </summary>
     /// <param name="charClass"><c>CharClasses</c> for whose equivalent string needs to be constructed</param>
     /// <returns>Array of string equivalent of Enum <c>CharClasses</c></returns>
-    public static string[] GetStrings(this CharClasses charClass)
+    public static string[] GetCharClasses(this CharClasses charClass)
     {
         var dest = new string[GetClassCount(charClass)];
+
+        PopulateCharClassesInternal(charClass, dest);
+
+        return dest;
+    }
+
+    public static void PopulateCharClasses(this CharClasses charClass, Span<string?> destination) =>
+        PopulateCharClassesInternal(charClass, destination);
+
+    // This method assumes that dest is large enough for the specified char classes
+    private static void PopulateCharClassesInternal(CharClasses charClass, Span<string?> dest)
+    {
         var index = 0;
 
         if (charClass.HasFlag(CharClasses.Lowercase))
@@ -75,8 +87,6 @@ public static class CharClassesHelpers
 
         if (index == 0)
             throw new InvalidEnumArgumentException(nameof(charClass));
-
-        return dest;
     }
 
     public static int GetClassCount(this CharClasses charClass)
