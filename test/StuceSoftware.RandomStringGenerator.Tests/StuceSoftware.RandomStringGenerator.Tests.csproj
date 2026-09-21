@@ -1,34 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net462;net472;net481;net8.0;net9.0;net10.0</TargetFrameworks>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net472;net481;net8.0;net9.0;net10.0</TargetFrameworks>
         <LangVersion>10</LangVersion>
         <IsPackable>false</IsPackable>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="TestResults\**" />
-      <EmbeddedResource Remove="TestResults\**" />
-      <None Remove="TestResults\**" />
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AwesomeAssertions" Version="9.6.0" />
-        <PackageReference Include="coverlet.collector" Version="6.0.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
-        <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+        <PackageReference Include="AwesomeAssertions" Version="9.6.0"/>
+        <PackageReference Include="coverlet.MTP" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Testing.Extensions.GitHubActionsReport" Version="2.4.1" />
+        <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\StuceSoftware.RandomStringGenerator\StuceSoftware.RandomStringGenerator.csproj" />
+        <ProjectReference Include="..\..\src\StuceSoftware.RandomStringGenerator\StuceSoftware.RandomStringGenerator.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit" />
+        <Using Include="Xunit"/>
     </ItemGroup>
 
 </Project>
