@@ -4,7 +4,7 @@ Authors :
 Jeff Shergalis   
 Lakhya Jyoti Nath (ljnath) [Author of RandomString4Net](https://github.com/ljnath/RandomString4Net)
 
-Date : September 2020 - October 2024  
+Date : September 2020 - September 2026  
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/jshergal/StuceSoftware.RandomStringGenerator)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jshergal/StuceSoftware.RandomStringGenerator/dotnet-CI-workflow.yaml)
@@ -35,7 +35,7 @@ symbols from the supported list. It is an ideal library for use in projects such
 * Supports random length of generated strings with a fixed max length
 * Supports true unique random number generation
 * Support force inclusion of strings of each type
-* Supports .NET Standard 2.0 & 2.1, .NET 6.0, 8.0 & 9.0
+* Supports .NET Standard 2.0 and .NET 8.0, 9.0 & 10.0
 
 ## Supported Types
 * **Lowercase** : *abcdefghijklmnopqrstuvwxyz*
