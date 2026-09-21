@@ -38,10 +38,10 @@ jobs:
       TERM: xterm
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v7
       with:
         dotnet-version: '10.x'
 
@@ -63,11 +63,15 @@ jobs:
   deploy:
     needs: build_and_test
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v7
       with:
         dotnet-version: '10.x'
 
